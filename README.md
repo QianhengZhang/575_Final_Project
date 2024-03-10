@@ -1,9 +1,23 @@
-# 575_Final_Project
-2024 Spring 575 Final Project
+# Team Name Not Decided
 
-## Team Members
+### Team Members
 1. Yanbing Chen
 
 2. Maggie Lehane
 
 3. Qianheng Zhang
+
+
+### Final Proposal
+1. Persona/Scenario
+    1. Persona
+    2. Scenario
+2. Requirements Document
+
+3. Wireframes
+
+
+
+
+
+
