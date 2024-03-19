@@ -10,10 +10,10 @@
 
 ### Final Proposal
 #### Persona/Scenario
-    1. Persona
-    2. Scenario
-       Scenario #1
-       Scenario #2
+1. Persona
+2. Scenario
+   Scenario #1
+   Scenario #2
     
 #### Requirements Document
    Representation
