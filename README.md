@@ -9,17 +9,17 @@
 
 
 ### Final Proposal
-1. Persona/Scenario
+#### Persona/Scenario
     1. Persona
     2. Scenario
+       Scenario #1
+       Scenario #2
     
-2. Requirements Document
+#### Requirements Document
+   Representation
+   Interaction
 
-3. Wireframes
-
-### Brainstorm
-1. World Language Map
-2. TBD
+#### Wireframes
 
 
 
