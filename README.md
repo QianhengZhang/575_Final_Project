@@ -16,8 +16,8 @@
    Scenario #2
     
 #### Requirements Document
-   Representation
-   Interaction
+1. Representation
+2. Interaction
 
 #### Wireframes
 
