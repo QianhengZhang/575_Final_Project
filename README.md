@@ -1,4 +1,4 @@
-# Team Name Not Decided
+# World Language Map Project
 
 ### Team Members
 1. Yanbing Chen
@@ -19,7 +19,8 @@
 1. Representation
 2. Interaction
 
-#### Wireframes
+#### Datasets
+1. Language families
 
 
 
