@@ -9,6 +9,11 @@
 
 
 ### Final Proposal
+#### Introduction
+##### Dataset: [The World Atlas of Language Structures (WALS)](https://www.kaggle.com/datasets/averkij/wals-dataset)
+
+The World Atlas of Language Structures (WALS) is a large database of structural (phonological, grammatical, lexical) properties of languages gathered from descriptive materials (such as reference grammars).
+
 #### Persona/Scenario
 1. Persona
 2. Scenario
