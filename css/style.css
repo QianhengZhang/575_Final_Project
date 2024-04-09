@@ -1,1 +1,28 @@
 /*insert style here*/
+
+#map {
+    position: absolute;
+    top: 10%;
+    bottom: 5%;
+    left: 20px;
+    width: 80%;
+    height: 80%;
+  }
+
+#title {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    font-size: 30px;
+}
+
+#panel {
+    position: absolute;
+    background-color: rgb(74, 82, 82);
+    right:20px;
+    width: 18%;
+    height: 80%;
+    bottom: 10%;
+    top:10%;
+    border-left-color: black;
+}
