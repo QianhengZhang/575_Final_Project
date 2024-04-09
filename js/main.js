@@ -18,6 +18,9 @@ function setMap(){
     }).addTo(map);
 }
 
+function search(country){
+
+}
 
 function reproject(event) {
 

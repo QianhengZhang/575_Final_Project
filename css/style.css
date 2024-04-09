@@ -26,3 +26,15 @@
     top:10%;
     border-left-color: black;
 }
+
+#search {
+    position: absolute;
+    fill: rgb(5, 254, 254);
+    right:20px;
+    width: 18%;
+    height: 30px;
+    top:10%;
+    border-left-color: black;
+    z-index: 20;
+}
+
