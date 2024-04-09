@@ -40,7 +40,24 @@ This is the introduction and proposal page for our final project in Geog 575, wh
 | 4 | Country Selection | Retrieve | Location. After search for a location from Query Panel, shows the summary of languages within that country |
 | 5 | Expression Selection | Reexpress | Objects; Choose if want proportional symbols to show total number of speakers or color schemes for endangerment index |
 
-### Lofi-Wireframe
+### Hifi-Wireframe
+1. Initial View
+![mock1](img/mockup-1%20first%20Interface.jpg)
+
+2. Reexpress
+![mock2](img/mockup-2%20reexpress.jpg)
+
+3. Search and filter by country
+![mock3](img/mockup-3%20filter%20by%20country.jpg)
+
+4. Checkbox and filter by endangerment level
+![mock4](img/mockup-4%20filter%20by%20endangerment%20level.jpg)
+
+5. Popup window showing details about an endangered language
+![mock5](img/mockup-5%20popup.jpg)
+
+6. help to provide more context about def of different endangerment level
+![mock6](img/mockup-6%20help.jpg)
 
 ### Dataset:
 * [The World Atlas of Language Structures (WALS)](https://www.kaggle.com/datasets/averkij/wals-dataset)
@@ -51,3 +68,6 @@ This project is an online resouce for sampling and researching endangered langua
 
 * [World language family](https://www.kaggle.com/datasets/rtatman/world-language-family-map)
 A comprehensive catalogue of the world's languages, language families and dialects.
+
+*[Global predictors of language endangerment and the future of linguistic diversity](https://www.nature.com/articles/s41559-021-01604-y)
+The latest publication about global language endangerment, their dataset combined data from WALS, UNESCO and include other societal variables to examine language vulnerability. The dataset is open-sourced in the supplemental materials.
