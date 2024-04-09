@@ -37,7 +37,8 @@ The following user scenario describes the use of “Forgotten Tongues: Interacti
 | 4 | Country Selection | Retrieve | Location. After search for a location from Query Panel, shows the summary of languages within that country |
 | 5 | Expression Selection | Reexpress | Objects; Choose if want proportional symbols to show total number of speakers or color schemes for endangerment index |
 
-### Lofi-Wireframe
+### Hifi-Wireframe
+
 
 ###
 ##### Dataset:
