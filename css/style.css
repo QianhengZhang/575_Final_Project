@@ -1,26 +1,42 @@
 /*insert style here*/
 
+#background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(235, 220, 202);
+    left: 0px;
+}
 #map {
     position: absolute;
     top: 10%;
     bottom: 5%;
-    left: 20px;
-    width: 80%;
+    left: 1px;
+    width: 70%;
     height: 80%;
   }
 
+#title-background {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    left: 0px;
+    top: 0px;
+    background-color: #D8CA9B;
+}
 #title {
     position: absolute;
-    top: 5%;
-    left: 5%;
-    font-size: 30px;
+    top: 1%;
+    left: 3%;
+    font-size: 80px;
+    font-family: "Jomhuria", serif;
 }
 
 #panel {
     position: absolute;
-    background-color: rgb(74, 82, 82);
-    right:20px;
-    width: 18%;
+    background-color: rgb(189, 165, 143);
+    right:0px;
+    width: 30%;
     height: 80%;
     bottom: 10%;
     top:10%;
