@@ -12,8 +12,8 @@
     top: 10%;
     bottom: 5%;
     left: 1px;
-    width: 70%;
-    height: 80%;
+    width: 80%;
+    height: 100%;
   }
 
 #title-background {
@@ -34,11 +34,10 @@
 
 #panel {
     position: absolute;
-    background-color: rgb(189, 165, 143);
+    background-color: rgb(143, 189, 182);
     right:0px;
-    width: 30%;
-    height: 80%;
-    bottom: 10%;
+    width: 20%;
+    height: 100%;
     top:10%;
     border-left-color: black;
 }
@@ -54,3 +53,6 @@
     z-index: 20;
 }
 
+#hide {
+
+}

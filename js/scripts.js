@@ -21,3 +21,12 @@ function createBarChart(data) {
 function createPieChart(data) {
 
 }
+
+function switchView(){
+
+}
+
+function createButton(){
+  const toggler = document.createElement("div");
+
+}

@@ -18,11 +18,9 @@ function setMap(){
 
     //call getData function
     getData(map);
-
+    map.control.scale().addTo(map);
 }
 
-<<<<<<< HEAD
-=======
 function getData(map) {
     fetch("data/language.geojson")
         .then(response => {
@@ -47,13 +45,13 @@ function getData(map) {
 
 function processData(data) {
     // Empty array to hold attributes
-    console.log(data.features[0].properties["lang_L1.POP_lang"]); 
+    console.log(data.features[0].properties["lang_L1.POP_lang"]);
     var attributes = [];
     return attributes;
 }
 
 function calcStats(data){
-    var allValues = []; 
+    var allValues = [];
     // Loop through each feature in the GeoJSON data
     for (var feature of data.features) {
         var value = feature.properties["lang_L1.POP_lang"];  // Get the population value for the language
@@ -149,27 +147,3 @@ function createPropSymbols(data,attributes){
 
 
 document.addEventListener('DOMContentLoaded', setMap);
-function search(country){
-
-}
-
-function reproject(event) {
-
-}
-
-function showDetail(object) {
-
-}
-
-function createLegend(data, type) {
-
-}
-
-function createBarChart(data) {
-
-}
-
-function createPieChart(data) {
-
-}
->>>>>>> ea4b0a6cecdb5e7e50c0cd10ff9827469f8e9db0
