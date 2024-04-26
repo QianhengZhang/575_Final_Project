@@ -10,11 +10,15 @@ function setMap(){
         zoom: 2
     });
     //add OSM base tilelayer
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
-	minZoom: 3,
-	maxZoom: 16,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'
+    
+    //customized mapbox layer: ancient chinese style
+    //var map = L.map('map5').setView([34.25, 108.94], 9);
+    var accessToken = "pk.eyJ1IjoibWxlaGFuZSIsImEiOiJjbG00NzJxNHIwdnQxM3FsZno2NXExeXN6In0.5sv_6g0kMbsjJHYEIJB_Uw";
+    var id = "mlehane/clvcpzcgy01b701qlffzn9n9h";
+    L.tileLayer(`https://api.mapbox.com/styles/v1/${id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        tileSize: 512,
+        zoomOffset: -1
     }).addTo(map);
 }
 
