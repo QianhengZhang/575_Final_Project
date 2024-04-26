@@ -2,7 +2,6 @@ var map;
 var attributes = [];
 dataStats = {};
 
-
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
@@ -81,7 +80,7 @@ function calcStats(data){
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
-    var minRadius = 1;
+    var minRadius = 0.2;
     //Flannery Appearance Compensation formula
     var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.5715) * minRadius
     return radius;
@@ -95,7 +94,7 @@ function pointToLayer(feature, latlng, attributes){
         color: "#000",
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.5,
+        fillOpacity: 0.8,
     };
 
     //For each feature, determine its value for the selected attribute
@@ -117,11 +116,18 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
+    // var popupContent = createPopupContent(feature.properties, attribute);
+        //build popup content string
     var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
+
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-options.radius) 
     });
+    //bind the popup to the circle marker
+    //var popupContent = new PopupContent(feature.properties, attribute);
+	//layer.bindPopup(popupContent.formatted, { offset: new L.Point(0, -options.radius) });
+    //return the circle marker to the L.geoJson pointToLayer option
 
     return layer;
 };
@@ -135,5 +141,9 @@ function createPropSymbols(data, attributes){
         }
     }).addTo(map);
 };
+
+
+
+
 
 document.addEventListener('DOMContentLoaded', setMap);

@@ -53,6 +53,11 @@
     z-index: 20;
 }
 
+#popupContent {
+    fill: #949185;
+    font-family: "Jomhuria", serif;
+}
+
 #hide {
 
 }
