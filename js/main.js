@@ -87,16 +87,34 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
+function getColor(response_AES_lang) {
+    switch (response_AES_lang) {
+        case 'moribund':
+            return "#DE2D26";
+        case 'shifting':
+            return "#FC9272";
+        case 'threatened':
+            return "#FCBBA1";
+        case 'nearly extinct':
+            return "#FB6A4A";
+        case 'extinct':
+            return "#5B5354";
+        default:
+            return "#ff7800"; // default color if none of the above categories are matched
+    }
+}
+
 function pointToLayer(feature, latlng, attributes){
     var attribute = attributes[7]; //Determine which attribute to visualize with proportional symbols
 
     var options = { //create marker options
-        fillColor: "#ff7800",
         color: "#000",
         weight: 1,
         opacity: 1,
         fillOpacity: 0.5,
     };
+
+    options.fillColor = getColor(feature.properties['response_AES_lang']);
 
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
