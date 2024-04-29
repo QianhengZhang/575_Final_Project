@@ -175,7 +175,12 @@ input#extinct_check {
     top: 45%;
 }
 
-#info_content {
+.info_content {
+    position: relative;
+    top:30%;
+}
+
+.info_title {
     position: relative;
     top:30%;
 }

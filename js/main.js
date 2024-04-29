@@ -8,6 +8,30 @@ var count = {
     "nearly_extinct": 0,
     "extinct": 0
 }
+const locationCoverage = ["Africa",
+    "Arab",
+    "Asia",
+    "Australia_and_New_Zealand",
+    "Central_America",
+    "Europe",
+    "Northern_America",
+    "Oceania",
+    "South-Eastern_Asia",
+    "South_America",
+    "Southern_Asia",
+    "Western_Africa"]
+
+const officialLanguage = [
+    "worldlang_Arabic_country",
+    "worldlang_Bahasa_country",
+    "worldlang_English_country",
+    "worldlang_French_country",
+    "worldlang_Hindustani_country",
+    "worldlang_Mandarin_country",
+    "worldlang_Portuguese_country",
+    "worldlang_Russian_country",
+    "worldlang_Spanish_country",
+    ]
 
 function setMap(){
     var height = window.innerHeight;
@@ -172,12 +196,54 @@ function onClick(e, properties) {
     var panel = document.getElementById("info");
     panel.innerHTML = "";
     console.log(properties)
-    var info_container = document.createElement("div")
-    info_container.id = "info_content"
-    const name = document.createElement("div")
-    name.appendChild(document.createTextNode("Language Name: " + properties.id_name_lang))
-    info_container.appendChild(name);
-    panel.appendChild(info_container);
+    var title = document.createElement("div");
+    title.innerHTML = "SocioEconomic Factors";
+    title.classList.add('info_title');
+    panel.appendChild(title);
+    panel.appendChild(contentWrapper("Language Name: ", properties.id_name_lang));
+    panel.appendChild(contentWrapper("Area: ", properties.lang_subregion_lang));
+    panel.appendChild(contentWrapper("Region Coverage: ", listToText('area', properties)));
+    panel.appendChild(contentWrapper("Local Official Language: ", listToText('language', properties)));
+    panel.appendChild(contentWrapper("GDP: ", properties["soceco_gdp.pcap.10yrmed_country"]));
+    panel.appendChild(contentWrapper("GINI Index: ", properties["soceco_Gini.SWIID.10yr.median_country"]));
+    panel.appendChild(contentWrapper("Education Expense: ", properties["edu_Mean.yr.school.10yr.median_country"]));
+
+}
+
+function contentWrapper(name, proprties) {
+    var info_container = document.createElement("div");
+    info_container.classList.add("info_content");
+    const attribute = document.createElement("div");
+    attribute.appendChild(document.createTextNode(name + proprties));
+    info_container.appendChild(attribute)
+    return info_container;
+}
+
+function listToText(type, properties) {
+    var result = "";
+    if(type == "area") {
+        locationCoverage.forEach(function(area){
+            if (properties[area] > 0) {
+                result += area.replace("_", " ");
+                result += ", ";
+            }
+        })
+    } else {
+        officialLanguage.forEach(function(language){
+            if (properties[language] > 0) {
+                var text = language.replace("worldlang_","");
+                text = text.replace("_country", "");
+                text = text.replace("_", " ");
+                result += text;
+                result += ", ";
+            }
+        })
+    }
+    if (result == "") {
+        return "None";
+    }
+    result = result.substring(0, result.length - 2);
+    return result;
 }
 
 function addCheckBoxFunctions() {
