@@ -1,13 +1,7 @@
 var map;
 var attributes = [];
 dataStats = {};
-var count = {
-    "moribund": 0,
-    "shifting": 0,
-    "threatened": 0,
-    "nearly_extinct": 0,
-    "extinct": 0
-}
+
 const locationCoverage = ["Africa",
     "Arab",
     "Asia",
@@ -150,7 +144,6 @@ function pointToLayer(feature, latlng, attributes){
         fillOpacity: 0.5,
         className: "show " + level,
     };
-    count[level] +=1
     options.fillColor = getColor(level);
 
     //For each feature, determine its value for the selected attribute
@@ -253,19 +246,100 @@ function addCheckBoxFunctions() {
         checkbox.addEventListener('change', function() {
             var layers = document.querySelectorAll("." + level);
             layers.forEach(function(layer) {
-                layer.classList.toggle("show");
-                layer.classList.toggle('hide');
+                toggleElements(layer);
             })
+            caculateCurrentShownElements();
         })
     })
 }
 
-function toggleElements() {
 
+
+function toggleElements(element) {
+    element.classList.toggle("show");
+    element.classList.toggle('hide');
+}
+
+function caculateCurrentShownElements() {
+    var shown = document.querySelectorAll('.show')
+    console.log(shown.length)
+    var count = {
+        "moribund": 0,
+        "shifting": 0,
+        "threatened": 0,
+        "nearly_extinct": 0,
+        "extinct": 0
+    }
+    shown.forEach(function(element) {
+        element.classList.forEach(function(className) {
+            //console.log(className);
+            console.log(Object.keys(count))
+            if (Object.keys(count).includes(className)) {
+                count[className] += 1;
+            }
+        })
+    })
+    console.log(count)
+    return count;
 }
 
 function reset() {
 
 }
 
-document.addEventListener('DOMContentLoaded', setMap);
+function makePieChart(data) {
+    const width = 200,
+    height = 200,
+    margin = 40;
+    document.querySelectorAll('#chart1').innerHTML="";
+    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+    const radius = Math.min(width, height) / 2 - margin;
+
+    // append the svg object to the div called 'my_dataviz'
+    const svg = d3.select("#chart1")
+    .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+    .append("g")
+        .attr("transform", `translate(${width/2}, ${height/2})`);
+    const color = d3.scaleOrdinal()
+        .domain(["moribund", "shifting", "threatened", "nearly_extinct", "extinct"])
+        .range(d3.schemeDark2);
+    update(data, svg, radius, color)
+}
+
+function update(data, svg, radius, color) {
+    console.log(data)
+
+    // Compute the position of each group on the pie:
+    const pie = d3.pie()
+      .value(function(d) {return d[1]; })
+      .sort(function(a, b) { return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+    const data_ready = pie(Object.entries(data))
+
+    // map to data
+    const u = svg.selectAll("path")
+      .data(data_ready)
+
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    u
+      .join('path')
+      .transition()
+      .duration(1000)
+      .attr('d', d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+      )
+      .attr('fill', function(d){ return(color(d.data[0])) })
+      .attr("stroke", "white")
+      .style("stroke-width", "2px")
+      .style("opacity", 1)
+
+
+}
+
+window.addEventListener("load", (event) => {
+    setMap();
+    var count = caculateCurrentShownElements()
+    makePieChart(count);
+});
