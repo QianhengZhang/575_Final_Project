@@ -61,3 +61,57 @@
 #hide {
 
 }
+
+.map-overlay {
+    position: absolute;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    text-align: center;
+}
+
+#filter {
+    bottom: 0;
+    right: 0;
+    top: %;
+    height: 15%;
+    margin-top: 40px;
+    width: 20%;
+    border-top: solid black;
+
+    border-bottom: solid black;
+    border-radius: 1px;
+}
+
+#info {
+    bottom: 0;
+    right: 0;
+    top: 20%;
+    height: 20%;
+    margin-top: 40px;
+    width: 20%;
+    border-bottom: solid black;
+    border-radius: 1px;
+}
+
+#chart1 {
+    bottom: 0;
+    right: 0;
+    top: 40%;
+    height: 20%;
+    margin-top: 40px;
+    width: 20%;
+    border-bottom: solid black;
+    border-radius: 1px;
+}
+
+#chart2 {
+    bottom: 0;
+    right: 0;
+    top: 60%;
+    height: 20%;
+    margin-top: 40px;
+    width: 20%;
+    border-bottom: solid black;
+    border-radius: 1px;
+}
+

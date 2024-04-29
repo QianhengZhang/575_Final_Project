@@ -1,5 +1,5 @@
-function searchCountry(map, country){
-
+function searchCountry(map, value){
+  console.log(value);
 }
 
 function reproject(event) {

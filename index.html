@@ -8,6 +8,8 @@
         <!--put your external stylesheet links here-->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+        <link rel="stylesheet" href="lib/Leaflet.AnimatedSearchBox.css">
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Jomhuria&display=swap" rel="stylesheet">
@@ -27,24 +29,27 @@
         place these within <script> tags-->
         <div id = "background"></div>
         <div id="title-background">
-
         </div>
         <div id="title">
             World Endangered Language Map
         </div>
+
         <div id="map">
 
         </div>
         <div id="panel">
-            <div id="search"></div>
-            <div id="chart1"></div>
-            <div id="chart2"></div>
-            <div class="button"></div>
         </div>
+        <div class='map-overlay' id="filter"></div>
+        <div class='map-overlay' id="info"></div>
+        <div class='map-overlay chart' id="chart1"></div>
+        <div class='map-overlay chart' id="chart2"></div>
+
         <!--put your external script links here-->
         <script src="lib/leaflet/leaflet-src.js"></script>
+        <script src="lib/Leaflet.AnimatedSearchBox.js"></script>
 
         <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/scripts.js"></script>
         <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
     </body>
 </html>

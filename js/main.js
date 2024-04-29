@@ -11,7 +11,7 @@ function setMap(){
         zoom: 2
     });
     //add OSM base tilelayer
-    
+
     //customized mapbox layer: ancient chinese style
     //var map = L.map('map5').setView([34.25, 108.94], 9);
     var accessToken = "pk.eyJ1IjoibWxlaGFuZSIsImEiOiJjbG00NzJxNHIwdnQxM3FsZno2NXExeXN6In0.5sv_6g0kMbsjJHYEIJB_Uw";
@@ -23,7 +23,12 @@ function setMap(){
         minZoom: 0,
 	    maxZoom: 20,
     }).addTo(map);
+    var searchbox = L.control.searchbox({
+        position: 'topright',
+        expand: 'left'
+    }).addTo(map);
 
+    //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
 };
@@ -48,7 +53,7 @@ function processData(data) {
         //only take attributes with population values
         attributes.push(attribute);
     };
-    
+
     return attributes;
 };
 
@@ -72,7 +77,7 @@ function calcStats(data){
         var sum = allValues.reduce((a, b) => a + b, 0);  // Use reduce to sum the array
         dataStats.mean = sum / allValues.length;  // Calculate mean
     }  // Return the statistics object
-    
+
     console.log(dataStats.mean);
     console.log(dataStats.max);
     console.log(dataStats.min);
@@ -138,7 +143,7 @@ function pointToLayer(feature, latlng, attributes){
     var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius) 
+        offset: new L.Point(0,-options.radius)
     });
 
     return layer;
@@ -153,5 +158,9 @@ function createPropSymbols(data, attributes){
         }
     }).addTo(map);
 };
+
+function makeGraph(){
+
+}
 
 document.addEventListener('DOMContentLoaded', setMap);
