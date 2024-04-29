@@ -183,4 +183,6 @@ input#extinct_check {
 .info_title {
     position: relative;
     top:30%;
+    font-style: bold;
+    font-size: 20;
 }
