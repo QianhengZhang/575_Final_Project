@@ -7,7 +7,7 @@ function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
-        center: [0, 0],
+        center: [20, 0],
         zoom: 2
     });
     //add OSM base tilelayer
@@ -158,6 +158,7 @@ function createPropSymbols(data, attributes){
         }
     }).addTo(map);
 };
+
 
 function makeGraph(){
 

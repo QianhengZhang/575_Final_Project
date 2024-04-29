@@ -2,15 +2,16 @@ var map;
 var attributes = [];
 dataStats = {};
 
+
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
-        center: [0, 0],
+        center: [20, 0],
         zoom: 2
     });
     //add OSM base tilelayer
-    
+
     //customized mapbox layer: ancient chinese style
     //var map = L.map('map5').setView([34.25, 108.94], 9);
     var accessToken = "pk.eyJ1IjoibWxlaGFuZSIsImEiOiJjbG00NzJxNHIwdnQxM3FsZno2NXExeXN6In0.5sv_6g0kMbsjJHYEIJB_Uw";
@@ -22,7 +23,12 @@ function setMap(){
         minZoom: 0,
 	    maxZoom: 20,
     }).addTo(map);
+    var searchbox = L.control.searchbox({
+        position: 'topright',
+        expand: 'left'
+    }).addTo(map);
 
+    //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
 };
@@ -34,9 +40,10 @@ function getData(map) {
         })
         .then(function(json){
             var attributes = processData(json); // Ensure this function is defined and working
-                calcStats(json);
-                createPropSymbols(json, attributes);
-            })
+            calcStats(json);
+            createPropSymbols(json, attributes);
+            createLegend(attributes);
+        })
 };
 
 function processData(data) {
@@ -47,7 +54,7 @@ function processData(data) {
         //only take attributes with population values
         attributes.push(attribute);
     };
-    
+
     return attributes;
 };
 
@@ -71,31 +78,103 @@ function calcStats(data){
         var sum = allValues.reduce((a, b) => a + b, 0);  // Use reduce to sum the array
         dataStats.mean = sum / allValues.length;  // Calculate mean
     }  // Return the statistics object
-    
+
     console.log(dataStats.mean);
     console.log(dataStats.max);
     console.log(dataStats.min);
+    console.log(dataStats);
 };
 
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
-    var minRadius = 0.2;
+    var minRadius = 1;
     //Flannery Appearance Compensation formula
-    var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.5715) * minRadius
+    var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.2) * minRadius
     return radius;
+};
+
+
+//create legend
+function createLegend(attributes) {
+
+	var LegendControl = L.Control.extend({
+		options: {
+			position: 'bottomright'
+		},
+		onAdd: function () {
+			// create the control container with a particular class name
+			var container = L.DomUtil.create('div', 'legend-control-container');
+
+			container.innerHTML = '<h3 class="temporalLegend">Population in <span class="year">1985</span></h3>';
+
+			//Step 1: start attribute legend svg string
+			var svg = '<svg id="attribute-legend" width="160px" height="80px">';
+
+			//array of circle names to base loop on
+			var circles = ["max", "mean", "min"];
+
+			//Step 2: loop to add each circle and text to svg string  
+			for (var i = 0; i < circles.length; i++) {
+
+				//Step 3: assign the r and cy attributes  
+				var radius = calcPropRadius(dataStats[circles[i]]);
+				var cy = 52 - radius;
+
+				//circle string  
+				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="35"/>';
+
+				//Step 4: create legend text to label each circle     				          
+				var textY = i * 20 + 12;
+				svg += '<text id="' + circles[i] + '-text" x="70" y="' + textY + '">' + Math.round(dataStats[circles[i]] * 100) / 100 + " million" + '</text>';
+
+			};
+
+			//add annotation to include the values below threshold
+			svg += '<text x="70" y="65">(and below)</text>';
+			svg += "</svg>";
+			svg += '<svg><circle class="legend-circle" id="nullCircle" r="' + minRadius + '"cy="' + 10 + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="35"/><text x="70" y="14">Zero or N/A</text></svg>';
+
+			//add attribute legend svg to container
+			container.insertAdjacentHTML('beforeend', svg);
+            console.log(container);
+			return container;
+
+            
+		}
+	});
+    console.log(circles);
+	map.addControl(new LegendControl());
+};
+
+function getColor(response_AES_lang) {
+    switch (response_AES_lang) {
+        case 'moribund':
+            return "#DE2D26";
+        case 'shifting':
+            return "#FC9272";
+        case 'threatened':
+            return "#FCBBA1";
+        case 'nearly extinct':
+            return "#FB6A4A";
+        case 'extinct':
+            return "#5B5354";
+        default:
+            return "#ff7800"; // default color if none of the above categories are matched
+    }
 };
 
 function pointToLayer(feature, latlng, attributes){
     var attribute = attributes[7]; //Determine which attribute to visualize with proportional symbols
 
     var options = { //create marker options
-        fillColor: "#ff7800",
         color: "#000",
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8,
+        fillOpacity: 0.5,
     };
+
+    options.fillColor = getColor(feature.properties['response_AES_lang']);
 
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -116,18 +195,11 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
-    // var popupContent = createPopupContent(feature.properties, attribute);
-        //build popup content string
     var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
-
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius) 
+        offset: new L.Point(0,-options.radius)
     });
-    //bind the popup to the circle marker
-    //var popupContent = new PopupContent(feature.properties, attribute);
-	//layer.bindPopup(popupContent.formatted, { offset: new L.Point(0, -options.radius) });
-    //return the circle marker to the L.geoJson pointToLayer option
 
     return layer;
 };
@@ -145,5 +217,8 @@ function createPropSymbols(data, attributes){
 
 
 
+function makeGraph(){
+
+}
 
 document.addEventListener('DOMContentLoaded', setMap);

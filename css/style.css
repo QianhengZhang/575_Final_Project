@@ -13,7 +13,7 @@
     bottom: 5%;
     left: 1px;
     width: 80%;
-    height: 100%;
+    height: 90%;
   }
 
 #title-background {
@@ -28,7 +28,7 @@
     position: absolute;
     top: 1%;
     left: 3%;
-    font-size: 80px;
+    font-size: 60px;
     font-family: "Jomhuria", serif;
 }
 
@@ -37,9 +37,21 @@
     background-color: rgb(143, 189, 182);
     right:0px;
     width: 20%;
-    height: 100%;
+    height: 90%;
     top:10%;
     border-left-color: black;
+}
+
+.legend-control-container {
+	width: 150px;
+	height: 170px;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	text-align: center;
+	border: solid gray 1px;
+	border-radius: 10px;
 }
 
 #search {
@@ -133,3 +145,4 @@
 .reset:hover {
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
 }
+
