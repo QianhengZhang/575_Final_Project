@@ -1,14 +1,20 @@
 var map;
 var attributes = [];
 dataStats = {};
-
+var count = {
+    "moribund": 0,
+    "shifting": 0,
+    "threatened": 0,
+    "nearly_extinct": 0,
+    "extinct": 0
+}
 
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
-        center: [0, 0],
-        zoom: 2
+        center: [10, 20],
+        zoom: 2.5
     });
     //add OSM base tilelayer
 
@@ -27,10 +33,11 @@ function setMap(){
         position: 'topright',
         expand: 'left'
     }).addTo(map);
-
+    addCheckBoxFunctions()
     //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
+    //drawPie(count)
 };
 
 function getData(map) {
@@ -86,7 +93,7 @@ function calcStats(data){
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
-    var minRadius = 1;
+    var minRadius = 1.5;
     //Flannery Appearance Compensation formula
     var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.2) * minRadius
     return radius;
@@ -100,7 +107,7 @@ function getColor(response_AES_lang) {
             return "#FC9272";
         case 'threatened':
             return "#FCBBA1";
-        case 'nearly extinct':
+        case 'nearly_extinct':
             return "#FB6A4A";
         case 'extinct':
             return "#5B5354";
@@ -111,15 +118,16 @@ function getColor(response_AES_lang) {
 
 function pointToLayer(feature, latlng, attributes){
     var attribute = attributes[7]; //Determine which attribute to visualize with proportional symbols
-
+    var level = feature.properties['response_AES_lang'].split(' ').join('_');
     var options = { //create marker options
         color: "#000",
         weight: 1,
         opacity: 1,
         fillOpacity: 0.5,
+        className: "show " + level,
     };
-
-    options.fillColor = getColor(feature.properties['response_AES_lang']);
+    count[level] +=1
+    options.fillColor = getColor(level);
 
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -129,7 +137,6 @@ function pointToLayer(feature, latlng, attributes){
 
     //create circle marker layer
     var layer = L.circleMarker(latlng, options);
-
     if (options.radius > 2) {
         var radius = calcPropRadius(feature.properties[attribute]);
         layer.setRadius(radius);
@@ -145,7 +152,9 @@ function pointToLayer(feature, latlng, attributes){
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-options.radius)
     });
-
+    layer.on('click', (e) => {
+        onClick(e, feature.properties);
+    })
     return layer;
 };
 
@@ -159,7 +168,37 @@ function createPropSymbols(data, attributes){
     }).addTo(map);
 };
 
-function makeGraph(){
+function onClick(e, properties) {
+    var panel = document.getElementById("info");
+    panel.innerHTML = "";
+    console.log(properties)
+    var info_container = document.createElement("div")
+    info_container.id = "info_content"
+    const name = document.createElement("div")
+    name.appendChild(document.createTextNode("Language Name: " + properties.id_name_lang))
+    info_container.appendChild(name);
+    panel.appendChild(info_container);
+}
+
+function addCheckBoxFunctions() {
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox) {
+        var level = checkbox.id.replace("_check", "");
+        checkbox.addEventListener('change', function() {
+            var layers = document.querySelectorAll("." + level);
+            layers.forEach(function(layer) {
+                layer.classList.toggle("show");
+                layer.classList.toggle('hide');
+            })
+        })
+    })
+}
+
+function toggleElements() {
+
+}
+
+function reset() {
 
 }
 
