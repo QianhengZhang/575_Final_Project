@@ -96,15 +96,16 @@ function setMap(){
         if (zoomlevel > 4.5) {
             if (map.hasLayer(heatmapLayer)) {
                 map.removeLayer(heatmapLayer);
-                map.addLayer(propSymbolLayer);
-                enableCheckBox();
             }
+            map.addLayer(propSymbolLayer);
+            enableCheckBox();
         }else if (zoomlevel <= 4.5) {
             if (map.hasLayer(propSymbolLayer)) {
                 map.removeLayer(propSymbolLayer);
-                map.addLayer(heatmapLayer);
-                disableCheckBox();
+
             }
+            map.addLayer(heatmapLayer);
+            disableCheckBox();
         }
         console.log("Current Zoom Level = " + zoomlevel);
     });
@@ -246,10 +247,10 @@ function pointToLayer(feature, latlng, attributes){
         weight: 1,
         opacity: 1,
         fillOpacity: 0.5,
-        className: "show " + level,
+        className: "show " + level + " id_" + feature.properties['id_name_lang'].split(' ').join('_'),
     };
     //console.log(latlng)
-    languages[feature.properties['id_name_lang'].toLowerCase()] = latlng;
+    languages[feature.properties['id_name_lang']] = latlng;
     options.fillColor = getColor(level);
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -292,6 +293,8 @@ function createPropSymbols(data, attributes){
 };
 
 function onClick(e, properties) {
+    var item = document.querySelector('.id_'+properties.id_name_lang.split(' ').join('_'));
+    item.classList.remove('highlight');
     var panel = document.getElementById("info");
     panel.innerHTML = "";
     console.log(properties)
@@ -521,11 +524,19 @@ function moveLabel() {
 };
 
 function search() {
-    var value = searchbox.getValue().toLowerCase();
+    var value = searchbox.getValue();
     if (value != "") {
         result = languages[value];
         console.log(result)
         if (result) {
+            console.log(languages[value])
+            map.removeLayer(heatmapLayer);
+            if (!map.hasLayer(propSymbolLayer)){
+                map.addLayer(propSymbolLayer);
+            }
+            var item = document.querySelector('.id_'+value.split(' ').join('_'));
+            console.log(item);
+            item.classList.add('highlight');
             map.flyTo([result['lat'], result['lng']], 8);
         }
     }

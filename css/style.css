@@ -178,6 +178,11 @@ path:hover {
     stroke-width: 5px;
 }
 
+.highlight {
+    stroke-width: 5px;
+    stroke: red;
+}
+
 .infolabel {
     position: absolute;
     height: 50px;
