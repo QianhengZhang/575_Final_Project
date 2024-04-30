@@ -99,7 +99,7 @@
     border-radius: 1px;
 }
 
-#chart1 {
+#chart {
     bottom: 0;
     right: 0;
     top: 60%;
@@ -172,4 +172,26 @@ input#extinct_check {
     top:30%;
     font-style: bold;
     font-size: 20;
+}
+
+path:hover {
+    stroke-width: 5px;
+}
+
+.infolabel {
+    position: absolute;
+    height: 50px;
+    min-width: 50px;
+    color: #fff;
+    background-color: #000;
+    border: solid thin #fff;
+    padding: 5px 10px;
+    z-index: 1000;
+}
+
+.infolabel h1 {
+    margin: 0 20px 0 0;
+    padding: 0;
+    display: inline-block;
+    line-height: 1em;
 }

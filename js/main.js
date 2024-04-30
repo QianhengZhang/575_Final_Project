@@ -1,6 +1,14 @@
 var map;
 var attributes = [];
 dataStats = {};
+languages = [];
+count = {
+    "moribund": 642,
+    "shifting": 2976,
+    "threatened": 1376,
+    "nearly_extinct": 332,
+    "extinct": 330
+}
 
 const locationCoverage = ["Africa",
     "Arab",
@@ -108,6 +116,7 @@ function calcStats(data){
     console.log(dataStats.min);
 };
 
+
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
@@ -145,7 +154,6 @@ function pointToLayer(feature, latlng, attributes){
         className: "show " + level,
     };
     options.fillColor = getColor(level);
-
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
 
@@ -164,11 +172,11 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
-    var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
+    //var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
     //bind the popup to the circle marker
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius)
-    });
+    // layer.bindPopup(popupContent, {
+    //     offset: new L.Point(0,-options.radius)
+    // });
     layer.on('click', (e) => {
         onClick(e, feature.properties);
     })
@@ -248,7 +256,8 @@ function addCheckBoxFunctions() {
             layers.forEach(function(layer) {
                 toggleElements(layer);
             })
-            caculateCurrentShownElements();
+            count = caculateCurrentShownElements();
+            makePieChart(count)
         })
     })
 }
@@ -263,7 +272,7 @@ function toggleElements(element) {
 function caculateCurrentShownElements() {
     var shown = document.querySelectorAll('.show')
     console.log(shown.length)
-    var count = {
+    count = {
         "moribund": 0,
         "shifting": 0,
         "threatened": 0,
@@ -288,15 +297,15 @@ function reset() {
 }
 
 function makePieChart(data) {
-    const width = 200,
-    height = 200,
+    const width = 300,
+    height = 300,
     margin = 40;
-    document.querySelectorAll('#chart1').innerHTML="";
+    document.querySelector('#chart').innerHTML="";
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     const radius = Math.min(width, height) / 2 - margin;
 
     // append the svg object to the div called 'my_dataviz'
-    const svg = d3.select("#chart1")
+    const svg = d3.select("#chart")
     .append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -304,12 +313,11 @@ function makePieChart(data) {
         .attr("transform", `translate(${width/2}, ${height/2})`);
     const color = d3.scaleOrdinal()
         .domain(["moribund", "shifting", "threatened", "nearly_extinct", "extinct"])
-        .range(d3.schemeDark2);
+        .range(["#DE2D26", "#FC9272", "#FCBBA1", "#FB6A4A", "#5B5354"]);
     update(data, svg, radius, color)
 }
 
 function update(data, svg, radius, color) {
-    console.log(data)
 
     // Compute the position of each group on the pie:
     const pie = d3.pie()
@@ -330,16 +338,61 @@ function update(data, svg, radius, color) {
         .innerRadius(0)
         .outerRadius(radius)
       )
+      .attr("id", function(d){
+        return "pie_" + d.data[0];
+      })
+      .attr("class", function(d){
+        return "pie";
+      })
       .attr('fill', function(d){ return(color(d.data[0])) })
       .attr("stroke", "white")
-      .style("stroke-width", "2px")
       .style("opacity", 1)
 
-
+    d3.selectAll("path")
+    .on("mouseover", (event, d) => setLabel(d))
+    .on("mouseout", (event, d) => removeLabel())
+    .on("mousemove", moveLabel);
 }
+
+function setLabel(props){
+    //label content
+    console.log(props.data[1])
+    var sum = 0;
+    console.log(count)
+    Object.values(count).forEach(function(number){
+        console.log(number)
+        sum += number;
+    })
+    var percentage = (props.data[1] / sum * 100).toFixed(2);
+    console.log(percentage)
+    var labelAttribute = "<h1>" +props.data[0] +
+     ": </h1><b>" +percentage + "%</b>";
+    //create info label div
+    var infolabel = d3.select("body")
+        .append("div")
+        .attr("class", "infolabel")
+        .attr("id", props.data[0] + "_label")
+        .html(labelAttribute);
+
+};
+
+function removeLabel() {
+    d3.select(".infolabel")
+        .remove();
+}
+
+function moveLabel(){
+    //use coordinates of mousemove event to set label coordinates
+    var x = event.clientX - 100,
+        y = event.clientY - 75;
+
+    d3.select(".infolabel")
+        .style("left", x + "px")
+        .style("top", y + "px");
+};
 
 window.addEventListener("load", (event) => {
     setMap();
-    var count = caculateCurrentShownElements()
+    console.log(count)
     makePieChart(count);
 });
