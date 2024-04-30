@@ -1,14 +1,48 @@
 var map;
+var heatmapLayer;
+var propSymbolLayer;
 var attributes = [];
 dataStats = {};
+languages = [];
+count = {
+    "moribund": 642,
+    "shifting": 2976,
+    "threatened": 1376,
+    "nearly_extinct": 332,
+    "extinct": 330
+}
 
+const locationCoverage = ["Africa",
+    "Arab",
+    "Asia",
+    "Australia_and_New_Zealand",
+    "Central_America",
+    "Europe",
+    "Northern_America",
+    "Oceania",
+    "South-Eastern_Asia",
+    "South_America",
+    "Southern_Asia",
+    "Western_Africa"]
+
+const officialLanguage = [
+    "worldlang_Arabic_country",
+    "worldlang_Bahasa_country",
+    "worldlang_English_country",
+    "worldlang_French_country",
+    "worldlang_Hindustani_country",
+    "worldlang_Mandarin_country",
+    "worldlang_Portuguese_country",
+    "worldlang_Russian_country",
+    "worldlang_Spanish_country",
+    ]
 
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
-        center: [20, 0],
-        zoom: 2
+        center: [10, 20],
+        zoom: 2.5
     });
     //add OSM base tilelayer
 
@@ -27,10 +61,26 @@ function setMap(){
         position: 'topright',
         expand: 'left'
     }).addTo(map);
-
+    addCheckBoxFunctions()
     //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
+    //drawPie(count)
+    map.on("zoomend", function() {
+        var zoomlevel = map.getZoom();
+        if (zoomlevel > 4.5) {
+            if (map.hasLayer(heatmapLayer)) {
+                map.removeLayer(heatmapLayer);
+                map.addLayer(propSymbolLayer);
+            }
+        }else if (zoomlevel <= 4.5) {
+            if (map.hasLayer(propSymbolLayer)) {
+                map.removeLayer(propSymbolLayer);
+                map.addLayer(heatmapLayer);
+            }
+        }
+        console.log("Current Zoom Level = " + zoomlevel);
+    });
 };
 
 function getData(map) {
@@ -42,8 +92,40 @@ function getData(map) {
             var attributes = processData(json); // Ensure this function is defined and working
                 calcStats(json);
                 createPropSymbols(json, attributes);
+                makeHeatMap(processDataHeatMap(json));
             })
 };
+
+function makeHeatMap(data) {
+    var cfg = {
+        "radius": 7,
+        "maxOpacity": .8,
+        "scaleRadius": true,
+        "useLocalExtrema": true,
+        latField: 'lat',
+        lngField: 'lng',
+        valueField: 'value'
+      };
+      console.log(data.length)
+      heatmapLayer = new HeatmapOverlay(cfg);
+      heatmapLayer.setData(data);
+      heatmapLayer.addTo(map);
+
+}
+
+function processDataHeatMap(data) {
+    var result = [];
+    //console.log(data)
+    data.features.forEach(function(row) {
+        var newRow = {
+            'lat': row.geometry.coordinates[1],
+            'lng': row.geometry.coordinates[0],
+            'value': row.properties["lang_L1.POP_lang"]
+        }
+        result.push(newRow)
+    })
+    return result;
+}
 
 function processData(data) {
     // Empty array to hold attributes
@@ -83,10 +165,11 @@ function calcStats(data){
     console.log(dataStats.min);
 };
 
+
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
-    var minRadius = 1;
+    var minRadius = 1.5;
     //Flannery Appearance Compensation formula
     var radius = 1.0083 * Math.pow(attValue/dataStats.min,0.2) * minRadius
     return radius;
@@ -100,7 +183,7 @@ function getColor(response_AES_lang) {
             return "#FC9272";
         case 'threatened':
             return "#FCBBA1";
-        case 'nearly extinct':
+        case 'nearly_extinct':
             return "#FB6A4A";
         case 'extinct':
             return "#5B5354";
@@ -111,16 +194,15 @@ function getColor(response_AES_lang) {
 
 function pointToLayer(feature, latlng, attributes){
     var attribute = attributes[7]; //Determine which attribute to visualize with proportional symbols
-
+    var level = feature.properties['response_AES_lang'].split(' ').join('_');
     var options = { //create marker options
         color: "#000",
         weight: 1,
         opacity: 1,
         fillOpacity: 0.5,
+        className: "show " + level,
     };
-
-    options.fillColor = getColor(feature.properties['response_AES_lang']);
-
+    options.fillColor = getColor(level);
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
 
@@ -129,7 +211,6 @@ function pointToLayer(feature, latlng, attributes){
 
     //create circle marker layer
     var layer = L.circleMarker(latlng, options);
-
     if (options.radius > 2) {
         var radius = calcPropRadius(feature.properties[attribute]);
         layer.setRadius(radius);
@@ -140,28 +221,241 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
-    var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
+    //var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
     //bind the popup to the circle marker
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius)
-    });
-
+    // layer.bindPopup(popupContent, {
+    //     offset: new L.Point(0,-options.radius)
+    // });
+    layer.on('click', (e) => {
+        onClick(e, feature.properties);
+    })
     return layer;
 };
 
 //Example 2.1 line 34...Add circle markers for point features to the map
 function createPropSymbols(data, attributes){
     //create a Leaflet GeoJSON layer and add it to the map
-    L.geoJson(data, {
+    propSymbolLayer = L.geoJson(data, {
         pointToLayer: function(feature, latlng){
             return pointToLayer(feature, latlng, attributes);
         }
-    }).addTo(map);
+    });
+    //propSymbolLayer.addTo(map);
 };
 
-
-function makeGraph(){
+function onClick(e, properties) {
+    var panel = document.getElementById("info");
+    panel.innerHTML = "";
+    console.log(properties)
+    var title = document.createElement("div");
+    title.innerHTML = "SocioEconomic Factors";
+    title.classList.add('info_title');
+    panel.appendChild(title);
+    panel.appendChild(contentWrapper("Language Name: ", properties.id_name_lang));
+    panel.appendChild(contentWrapper("Area: ", properties.lang_subregion_lang));
+    panel.appendChild(contentWrapper("Region Coverage: ", listToText('area', properties)));
+    panel.appendChild(contentWrapper("Local Official Language: ", listToText('language', properties)));
+    panel.appendChild(contentWrapper("GDP: ", properties["soceco_gdp.pcap.10yrmed_country"]));
+    panel.appendChild(contentWrapper("GINI Index: ", properties["soceco_Gini.SWIID.10yr.median_country"]));
+    panel.appendChild(contentWrapper("Education Expense: ", properties["edu_Mean.yr.school.10yr.median_country"]));
 
 }
 
-document.addEventListener('DOMContentLoaded', setMap);
+function contentWrapper(name, proprties) {
+    var info_container = document.createElement("div");
+    info_container.classList.add("info_content");
+    const attribute = document.createElement("div");
+    attribute.appendChild(document.createTextNode(name + proprties));
+    info_container.appendChild(attribute)
+    return info_container;
+}
+
+function listToText(type, properties) {
+    var result = "";
+    if(type == "area") {
+        locationCoverage.forEach(function(area){
+            if (properties[area] > 0) {
+                result += area.replace("_", " ");
+                result += ", ";
+            }
+        })
+    } else {
+        officialLanguage.forEach(function(language){
+            if (properties[language] > 0) {
+                var text = language.replace("worldlang_","");
+                text = text.replace("_country", "");
+                text = text.replace("_", " ");
+                result += text;
+                result += ", ";
+            }
+        })
+    }
+    if (result == "") {
+        return "None";
+    }
+    result = result.substring(0, result.length - 2);
+    return result;
+}
+
+function addCheckBoxFunctions() {
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox) {
+        var level = checkbox.id.replace("_check", "");
+        checkbox.addEventListener('change', function() {
+            var layers = document.querySelectorAll("." + level);
+            layers.forEach(function(layer) {
+                toggleElements(layer);
+            })
+            count = caculateCurrentShownElements();
+            makePieChart(count)
+        })
+    })
+}
+
+
+
+function toggleElements(element) {
+    element.classList.toggle("show");
+    element.classList.toggle('hide');
+}
+
+function caculateCurrentShownElements() {
+    var shown = document.querySelectorAll('.show')
+    console.log(shown.length)
+    count = {
+        "moribund": 0,
+        "shifting": 0,
+        "threatened": 0,
+        "nearly_extinct": 0,
+        "extinct": 0
+    }
+    shown.forEach(function(element) {
+        element.classList.forEach(function(className) {
+            //console.log(className);
+            console.log(Object.keys(count))
+            if (Object.keys(count).includes(className)) {
+                count[className] += 1;
+            }
+        })
+    })
+    console.log(count)
+    return count;
+}
+
+function reset() {
+
+}
+
+function makePieChart(data) {
+    const width = 300,
+    height = 300,
+    margin = 40;
+    document.querySelector('#chart').innerHTML="";
+    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+    const radius = Math.min(width, height) / 2 - margin;
+
+    // append the svg object to the div called 'my_dataviz'
+    const svg = d3.select("#chart")
+    .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+    .append("g")
+        .attr("transform", `translate(${width/2}, ${height/2})`);
+    const color = d3.scaleOrdinal()
+        .domain(["moribund", "shifting", "threatened", "nearly_extinct", "extinct"])
+        .range(["#DE2D26", "#FC9272", "#FCBBA1", "#FB6A4A", "#5B5354"]);
+    update(data, svg, radius, color)
+}
+
+function update(data, svg, radius, color) {
+
+    // Compute the position of each group on the pie:
+    const pie = d3.pie()
+      .value(function(d) {return d[1]; })
+      .sort(function(a, b) { return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+    const data_ready = pie(Object.entries(data))
+
+    // map to data
+    const u = svg.selectAll("path")
+      .data(data_ready)
+
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    u
+      .join('path')
+      .transition()
+      .duration(1000)
+      .attr('d', d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+      )
+      .attr("id", function(d){
+        return "pie_" + d.data[0];
+      })
+      .attr("class", function(d){
+        return "pie";
+      })
+      .attr('fill', function(d){ return(color(d.data[0])) })
+      .attr("stroke", "white")
+      .style("opacity", 1)
+
+    d3.selectAll("path")
+    //.on("click", (event, d) => piefilter(d))
+    .on("mouseover", (event, d) => setLabel(d))
+    .on("mouseout", (event, d) => removeLabel())
+    .on("mousemove", moveLabel);
+}
+
+function setLabel(props){
+    //label content
+    console.log(props.data[1])
+    var sum = 0;
+    console.log(count)
+    Object.values(count).forEach(function(number){
+        console.log(number)
+        sum += number;
+    })
+    var percentage = (props.data[1] / sum * 100).toFixed(2);
+    console.log(percentage)
+    var labelAttribute = "<h1>" +props.data[0] +
+     ": </h1><b>" +percentage + "%</b>";
+    //create info label div
+    var infolabel = d3.select("body")
+        .append("div")
+        .attr("class", "infolabel")
+        .attr("id", props.data[0] + "_label")
+        .html(labelAttribute);
+
+};
+
+function piefilter(props) {
+    console.log(props.data[0]);
+    document.getElementById(props.data[0]+ "_check").checked = false;
+    var layers = document.querySelectorAll("." + props.data[0]);
+    layers.forEach(function(layer) {
+        toggleElements(layer);
+    })
+    delete count[props.data[0]];
+    makePieChart(count);
+    removeLabel();
+}
+
+function removeLabel() {
+    d3.select(".infolabel")
+        .remove();
+}
+
+function moveLabel(){
+    //use coordinates of mousemove event to set label coordinates
+    var x = event.clientX - 100,
+        y = event.clientY - 75;
+
+    d3.select(".infolabel")
+        .style("left", x + "px")
+        .style("top", y + "px");
+};
+
+window.addEventListener("load", (event) => {
+    setMap();
+    console.log(count)
+    makePieChart(count);
+});
