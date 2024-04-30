@@ -1,9 +1,12 @@
 var map;
+var searchbox;
+var fuse;
 var heatmapLayer;
 var propSymbolLayer;
 var attributes = [];
 dataStats = {};
-languages = [];
+languages = {};
+
 count = {
     "moribund": 642,
     "shifting": 2976,
@@ -57,14 +60,36 @@ function setMap(){
         minZoom: 0,
 	    maxZoom: 20,
     }).addTo(map);
-    var searchbox = L.control.searchbox({
+
+
+    searchbox = L.control.searchbox({
         position: 'topright',
-        expand: 'left'
+        expand: 'left',
+        autocompleteFeatures: ['setValueOnClick']
     }).addTo(map);
+    searchbox.onButton("click", search);
+    searchbox.onInput("keyup", function (e) {
+        if (e.keyCode == 13) {
+            search();
+        } else {
+            var value = searchbox.getValue();
+            if (value != "") {
+                var results = fuse.search(value);
+                console.log(results)
+                searchbox.setItems(results.map(res => res.item).slice(0, 5));
+            } else {
+                searchbox.clearItems();
+            }
+        }
+    });
     addCheckBoxFunctions()
     //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
+    console.log(Object.keys(languages))
+
+    setHeatMap(Object.keys(count));
+    disableCheckBox()
     //drawPie(count)
     map.on("zoomend", function() {
         var zoomlevel = map.getZoom();
@@ -72,11 +97,13 @@ function setMap(){
             if (map.hasLayer(heatmapLayer)) {
                 map.removeLayer(heatmapLayer);
                 map.addLayer(propSymbolLayer);
+                enableCheckBox();
             }
         }else if (zoomlevel <= 4.5) {
             if (map.hasLayer(propSymbolLayer)) {
                 map.removeLayer(propSymbolLayer);
                 map.addLayer(heatmapLayer);
+                disableCheckBox();
             }
         }
         console.log("Current Zoom Level = " + zoomlevel);
@@ -92,8 +119,24 @@ function getData(map) {
             var attributes = processData(json); // Ensure this function is defined and working
                 calcStats(json);
                 createPropSymbols(json, attributes);
-                makeHeatMap(processDataHeatMap(json));
+                fuse = new Fuse(Object.keys(languages), {
+                    shouldSort: true,
+                    threshold: 0.6,
+                    location: 0,
+                    distance: 100,
+                    minMatchCharLength: 1
+                });
             })
+};
+
+function setHeatMap(categories) {
+    fetch("data/language.geojson")
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(json){
+            makeHeatMap(processDataHeatMap(json, categories));
+        })
 };
 
 function makeHeatMap(data) {
@@ -113,16 +156,19 @@ function makeHeatMap(data) {
 
 }
 
-function processDataHeatMap(data) {
+function processDataHeatMap(data, categories) {
     var result = [];
-    //console.log(data)
+    console.log(data)
     data.features.forEach(function(row) {
-        var newRow = {
-            'lat': row.geometry.coordinates[1],
-            'lng': row.geometry.coordinates[0],
-            'value': row.properties["lang_L1.POP_lang"]
+        if (categories.includes(row.properties['response_AES_lang'].split(" ").join("_"))) {
+            //console.log(row)
+            var newRow = {
+                'lat': row.geometry.coordinates[1],
+                'lng': row.geometry.coordinates[0],
+                'value': row.properties["lang_L1.POP_lang"]
+            }
+            result.push(newRow)
         }
-        result.push(newRow)
     })
     return result;
 }
@@ -202,6 +248,8 @@ function pointToLayer(feature, latlng, attributes){
         fillOpacity: 0.5,
         className: "show " + level,
     };
+    //console.log(latlng)
+    languages[feature.properties['id_name_lang'].toLowerCase()] = latlng;
     options.fillColor = getColor(level);
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -297,6 +345,19 @@ function listToText(type, properties) {
     return result;
 }
 
+function disableCheckBox() {
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox){
+        checkbox.disabled = true;
+    })
+}
+
+function enableCheckBox() {
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox){
+        checkbox.disabled = false;
+    })
+}
 function addCheckBoxFunctions() {
     var checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(function(checkbox) {
@@ -310,6 +371,13 @@ function addCheckBoxFunctions() {
             makePieChart(count)
         })
     })
+    var checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    var categories = []
+    checkedBoxes.forEach(function(checkbox) {
+        var level = checkbox.id.replace("_check", "");
+        categories.push(level);
+    })
+    //setHeatMap(categories)
 }
 
 
@@ -320,8 +388,6 @@ function toggleElements(element) {
 }
 
 function caculateCurrentShownElements() {
-    var shown = document.querySelectorAll('.show')
-    console.log(shown.length)
     count = {
         "moribund": 0,
         "shifting": 0,
@@ -444,7 +510,7 @@ function removeLabel() {
         .remove();
 }
 
-function moveLabel(){
+function moveLabel() {
     //use coordinates of mousemove event to set label coordinates
     var x = event.clientX - 100,
         y = event.clientY - 75;
@@ -453,6 +519,21 @@ function moveLabel(){
         .style("left", x + "px")
         .style("top", y + "px");
 };
+
+function search() {
+    var value = searchbox.getValue().toLowerCase();
+    if (value != "") {
+        result = languages[value];
+        console.log(result)
+        if (result) {
+            map.flyTo([result['lat'], result['lng']], 8);
+        }
+    }
+    setTimeout(function () {
+        searchbox.hide();
+        searchbox.clear();
+    }, 100);
+}
 
 window.addEventListener("load", (event) => {
     setMap();
