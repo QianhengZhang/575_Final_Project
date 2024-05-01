@@ -115,8 +115,8 @@
     background-color: white;
     border-radius: 12px;
     border-color: black;
-    left: 12px;
-    top: 19%;
+    right: 24%;
+    top: 12%;
     height: 32px;
     width: 32px;
     z-index: 1000;

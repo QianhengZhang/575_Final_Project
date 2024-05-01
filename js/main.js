@@ -1,12 +1,13 @@
 var map;
 var searchbox;
-var fuse;
+var fuseLanguage;
+var fuseCountry
 var heatmapLayer;
 var propSymbolLayer;
 var attributes = [];
 dataStats = {};
-languages = {};
-
+searchItemsLanguages = {};
+searchItemsCountries = {};
 count = {
     "moribund": 642,
     "shifting": 2976,
@@ -58,12 +59,16 @@ function setMap(){
         tileSize: 512,
         zoomOffset: -1,
         minZoom: 0,
-	    maxZoom: 20,
+	    maxZoom: 20
     }).addTo(map);
 
+    map.zoomControl.remove();
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
 
     searchbox = L.control.searchbox({
-        position: 'topright',
+        position: 'topleft',
         expand: 'left',
         autocompleteFeatures: ['setValueOnClick']
     }).addTo(map);
@@ -74,9 +79,11 @@ function setMap(){
         } else {
             var value = searchbox.getValue();
             if (value != "") {
-                var results = fuse.search(value);
-                console.log(results)
-                searchbox.setItems(results.map(res => res.item).slice(0, 5));
+                var languageResults = fuseLanguage.search(value);
+                var countryResults = fuseCountry.search(value);
+                console.log(languageResults)
+                console.log(countryResults.map(res => res.item).slice(0, 5))
+                searchbox.setItems(countryResults.map(res => res.item).slice(0, 5).concat(languageResults.map(res => res.item).slice(0, 5)));
             } else {
                 searchbox.clearItems();
             }
@@ -86,7 +93,8 @@ function setMap(){
     //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
     //call getData function
     getData();
-    console.log(Object.keys(languages))
+    getCountry();
+    console.log(Object.keys(searchItemsLanguages))
 
     setHeatMap(Object.keys(count));
     disableCheckBox()
@@ -120,7 +128,7 @@ function getData(map) {
             var attributes = processData(json); // Ensure this function is defined and working
                 calcStats(json);
                 createPropSymbols(json, attributes);
-                fuse = new Fuse(Object.keys(languages), {
+                fuseLanguage = new Fuse(Object.keys(searchItemsLanguages), {
                     shouldSort: true,
                     threshold: 0.6,
                     location: 0,
@@ -129,6 +137,26 @@ function getData(map) {
                 });
             })
 };
+
+function getCountry() {
+    fetch("data/countries.geojson")
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(json) {
+            json.features.forEach(function(row){
+                searchItemsCountries[row.properties['COUNTRY']] = [row.geometry.coordinates[1],row.geometry.coordinates[0]];
+                })
+            fuseCountry =  new Fuse(Object.keys(searchItemsCountries), {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                minMatchCharLength: 1
+            });
+        })
+};
+
 
 function setHeatMap(categories) {
     fetch("data/language.geojson")
@@ -250,7 +278,7 @@ function pointToLayer(feature, latlng, attributes){
         className: "show " + level + " id_" + feature.properties['id_name_lang'].split(' ').join('_'),
     };
     //console.log(latlng)
-    languages[feature.properties['id_name_lang']] = latlng;
+    searchItemsLanguages[feature.properties['id_name_lang']] = latlng;
     options.fillColor = getColor(level);
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -526,10 +554,10 @@ function moveLabel() {
 function search() {
     var value = searchbox.getValue();
     if (value != "") {
-        result = languages[value];
-        console.log(result)
-        if (result) {
-            console.log(languages[value])
+        languageResult = searchItemsLanguages[value];
+        countryResult = searchItemsCountries[value];
+        if (languageResult) {
+            console.log(searchItemsLanguages[value])
             map.removeLayer(heatmapLayer);
             if (!map.hasLayer(propSymbolLayer)){
                 map.addLayer(propSymbolLayer);
@@ -537,13 +565,22 @@ function search() {
             var item = document.querySelector('.id_'+value.split(' ').join('_'));
             console.log(item);
             item.classList.add('highlight');
-            map.flyTo([result['lat'], result['lng']], 8);
+            map.flyTo([languageResult['lat'], languageResult['lng']], 8);
+        } else if(countryResult) {
+            map.removeLayer(heatmapLayer);
+            if (!map.hasLayer(propSymbolLayer)){
+                map.addLayer(propSymbolLayer);
+            }
+            console.log(countryResult);
+            map.flyTo([countryResult[0], countryResult[1]], 6);
+        } else {
+            searchbox.setValue('No result!');
         }
     }
     setTimeout(function () {
         searchbox.hide();
         searchbox.clear();
-    }, 100);
+    }, 800);
 }
 
 window.addEventListener("load", (event) => {
