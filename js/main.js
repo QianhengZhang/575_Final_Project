@@ -42,11 +42,7 @@ const officialLanguage = [
     ]
 
 function initializing(){
-    searchbox = L.control.searchbox({
-        position: 'topleft',
-        expand: 'left',
-        autocompleteFeatures: ['setValueOnClick']
-    }).addTo(map);
+
     searchbox.onButton("click", search);
     searchbox.onInput("keyup", function (e) {
         if (e.keyCode == 13) {
@@ -94,6 +90,11 @@ function setMap(){
     map.zoomControl.remove();
     L.control.zoom({
         position: 'bottomright'
+    }).addTo(map);
+    searchbox = L.control.searchbox({
+        position: 'topleft',
+        expand: 'left',
+        autocompleteFeatures: ['setValueOnClick']
     }).addTo(map);
     getData();
     setHeatMap(Object.keys(count));
@@ -454,6 +455,7 @@ function reset() {
     checkboxes.forEach(function(checkbox) {
         checkbox.checked = true;
     })
+    document.getElementById('info').innerHTML = '<span id="info_placeholder">Zoom in to see more!</span>'
     map.remove();
     setMap();
     makePieChart(count);
