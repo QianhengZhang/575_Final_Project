@@ -120,6 +120,7 @@ function getData(map) {
             var attributes = processData(json); // Ensure this function is defined and working
                 calcStats(json);
                 createPropSymbols(json, attributes);
+                createLegend(attributes);
                 fuse = new Fuse(Object.keys(languages), {
                     shouldSort: true,
                     threshold: 0.6,
@@ -290,6 +291,56 @@ function createPropSymbols(data, attributes){
         }
     });
     //propSymbolLayer.addTo(map);
+};
+
+//create legend
+function createLegend(attributes) {
+
+	var LegendControl = L.Control.extend({
+		options: {
+			position: 'bottomleft'
+		},
+		onAdd: function () {
+			// create the control container with a particular class name
+			var container = L.DomUtil.create('div', 'legend-control-container');
+
+			container.innerHTML = '<h3 class="temporalLegend"> Total Number of Speakers</h3>';
+
+			//Step 1: start attribute legend svg string
+			var svg = '<svg id="attribute-legend" width="180px" height="150px">';
+
+			//array of circle names to base loop on
+			var circles = ["max", "mean", "min"];
+
+			//Step 2: loop to add each circle and text to svg string  
+			for (var i = 0; i < circles.length; i++) {
+
+				//Step 3: assign the r and cy attributes  
+				var radius = calcPropRadius(dataStats[circles[i]]);
+				var cy = 100 - radius;
+
+				//circle string  
+				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+
+				//Step 4: create legend text to label each circle     				          
+				var textY = i * 30 + 22;
+				svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">' + Math.round(dataStats[circles[i]] * 100) / 100 + '</text>';
+
+			};
+
+			//add annotation to include the values below threshold
+			//svg += '<text x="70" y="65">(and below)</text>';
+			//svg += "</svg>";
+			//svg += '<svg><circle class="legend-circle" id="nullCircle" r="' + 1 + '"cy="' + 10 + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="35"/><text x="70" y="14">Zero or N/A</text></svg>';
+
+			//add attribute legend svg to container
+			container.insertAdjacentHTML('beforeend', svg);
+			return container;
+
+            
+		}
+	});
+	map.addControl(new LegendControl());
 };
 
 function onClick(e, properties) {
