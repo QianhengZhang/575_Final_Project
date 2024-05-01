@@ -569,6 +569,7 @@ function moveLabel() {
 
 function search() {
     var value = searchbox.getValue();
+    value = capitalize(value);
     if (value != "") {
         languageResult = searchItemsLanguages[value];
         countryResult = searchItemsCountries[value];
@@ -598,6 +599,23 @@ function search() {
         searchbox.clear();
     }, 800);
 }
+
+function capitalize(string) {
+    var wordList = string.split(' ');
+    var newWordList = []
+    wordList.forEach(function(word) {
+        var first = word.charAt(0);
+        console.log(word)
+        const firstLetterCap = first.toUpperCase()
+
+        const remainingLetters = word.slice(1)
+        const newWord = firstLetterCap + remainingLetters;
+        newWordList.push(newWord)
+    })
+    const newWords = newWordList.join(" ");
+    return newWords;
+}
+
 
 window.addEventListener("load", (event) => {
     setMap();
