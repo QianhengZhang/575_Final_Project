@@ -88,7 +88,6 @@
     height: 20%;
     margin-top: 40px;
     width: 23%;
-    border-top: solid black;
     display: flex;
     flex-direction: column;
     border-bottom: solid black;
@@ -120,17 +119,17 @@
     width: 23%;
 }
 
-.reset {
+#reset {
     position: absolute;
     overflow: auto;
     background: url('../img/reset.png');
     background-color: white;
-    border-radius: 12px;
+    border-radius: 25px;
     border-color: black;
-    left: 12px;
-    top: 19%;
-    height: 32px;
-    width: 32px;
+    right: 24%;
+    top: 11.5%;
+    height: 40px;
+    width: 40px;
     z-index: 1000;
     cursor: pointer;
 }

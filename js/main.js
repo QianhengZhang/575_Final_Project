@@ -1,12 +1,13 @@
 var map;
 var searchbox;
-var fuse;
+var fuseLanguage;
+var fuseCountry
 var heatmapLayer;
 var propSymbolLayer;
 var attributes = [];
 dataStats = {};
-languages = {};
-
+searchItemsLanguages = {};
+searchItemsCountries = {};
 count = {
     "moribund": 642,
     "shifting": 2976,
@@ -40,6 +41,31 @@ const officialLanguage = [
     "worldlang_Spanish_country",
     ]
 
+function initializing(){
+
+    searchbox.onButton("click", search);
+    searchbox.onInput("keyup", function (e) {
+        if (e.keyCode == 13) {
+            search();
+        } else {
+            var value = searchbox.getValue();
+            if (value != "") {
+                var languageResults = fuseLanguage.search(value);
+                var countryResults = fuseCountry.search(value);
+                console.log(languageResults)
+                console.log(countryResults.map(res => res.item).slice(0, 5))
+                searchbox.setItems(countryResults.map(res => res.item).slice(0, 5).concat(languageResults.map(res => res.item).slice(0, 5)));
+            } else {
+                searchbox.clearItems();
+            }
+        }
+    });
+    addCheckBoxFunctions()
+    getCountry();
+    document.getElementById('reset').addEventListener('click', function(e){
+        reset();
+    })
+}
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
@@ -58,36 +84,19 @@ function setMap(){
         tileSize: 512,
         zoomOffset: -1,
         minZoom: 0,
-	    maxZoom: 20,
+	    maxZoom: 20
     }).addTo(map);
 
-
+    map.zoomControl.remove();
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
     searchbox = L.control.searchbox({
-        position: 'topright',
+        position: 'topleft',
         expand: 'left',
         autocompleteFeatures: ['setValueOnClick']
     }).addTo(map);
-    searchbox.onButton("click", search);
-    searchbox.onInput("keyup", function (e) {
-        if (e.keyCode == 13) {
-            search();
-        } else {
-            var value = searchbox.getValue();
-            if (value != "") {
-                var results = fuse.search(value);
-                console.log(results)
-                searchbox.setItems(results.map(res => res.item).slice(0, 5));
-            } else {
-                searchbox.clearItems();
-            }
-        }
-    });
-    addCheckBoxFunctions()
-    //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
-    //call getData function
     getData();
-    console.log(Object.keys(languages))
-
     setHeatMap(Object.keys(count));
     disableCheckBox()
     //drawPie(count)
@@ -109,6 +118,7 @@ function setMap(){
         }
         console.log("Current Zoom Level = " + zoomlevel);
     });
+
 };
 
 function getData(map) {
@@ -121,7 +131,7 @@ function getData(map) {
                 calcStats(json);
                 createPropSymbols(json, attributes);
                 createLegend(attributes);
-                fuse = new Fuse(Object.keys(languages), {
+                fuseLanguage = new Fuse(Object.keys(searchItemsLanguages), {
                     shouldSort: true,
                     threshold: 0.6,
                     location: 0,
@@ -130,6 +140,26 @@ function getData(map) {
                 });
             })
 };
+
+function getCountry() {
+    fetch("data/countries.geojson")
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(json) {
+            json.features.forEach(function(row){
+                searchItemsCountries[row.properties['COUNTRY']] = [row.geometry.coordinates[1],row.geometry.coordinates[0]];
+                })
+            fuseCountry =  new Fuse(Object.keys(searchItemsCountries), {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                minMatchCharLength: 1
+            });
+        })
+};
+
 
 function setHeatMap(categories) {
     fetch("data/language.geojson")
@@ -251,7 +281,7 @@ function pointToLayer(feature, latlng, attributes){
         className: "show " + level + " id_" + feature.properties['id_name_lang'].split(' ').join('_'),
     };
     //console.log(latlng)
-    languages[feature.properties['id_name_lang']] = latlng;
+    searchItemsLanguages[feature.properties['id_name_lang']] = latlng;
     options.fillColor = getColor(level);
     //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[attribute]);
@@ -449,6 +479,7 @@ function caculateCurrentShownElements() {
         "nearly_extinct": 0,
         "extinct": 0
     }
+    var shown = document.querySelectorAll('.show');
     shown.forEach(function(element) {
         element.classList.forEach(function(className) {
             //console.log(className);
@@ -463,7 +494,22 @@ function caculateCurrentShownElements() {
 }
 
 function reset() {
-
+    console.log('reset')
+    count = {
+        "moribund": 642,
+        "shifting": 2976,
+        "threatened": 1376,
+        "nearly_extinct": 332,
+        "extinct": 330
+    }
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = true;
+    })
+    document.getElementById('info').innerHTML = '<span id="info_placeholder">Zoom in to see more!</span>'
+    map.remove();
+    setMap();
+    makePieChart(count);
 }
 
 function makePieChart(data) {
@@ -576,11 +622,12 @@ function moveLabel() {
 
 function search() {
     var value = searchbox.getValue();
+    value = capitalize(value);
     if (value != "") {
-        result = languages[value];
-        console.log(result)
-        if (result) {
-            console.log(languages[value])
+        languageResult = searchItemsLanguages[value];
+        countryResult = searchItemsCountries[value];
+        if (languageResult) {
+            console.log(searchItemsLanguages[value])
             map.removeLayer(heatmapLayer);
             if (!map.hasLayer(propSymbolLayer)){
                 map.addLayer(propSymbolLayer);
@@ -588,17 +635,44 @@ function search() {
             var item = document.querySelector('.id_'+value.split(' ').join('_'));
             console.log(item);
             item.classList.add('highlight');
-            map.flyTo([result['lat'], result['lng']], 8);
+            map.flyTo([languageResult['lat'], languageResult['lng']], 8);
+        } else if(countryResult) {
+            map.removeLayer(heatmapLayer);
+            if (!map.hasLayer(propSymbolLayer)){
+                map.addLayer(propSymbolLayer);
+            }
+            console.log(countryResult);
+            map.flyTo([countryResult[0], countryResult[1]], 6);
+        } else {
+            searchbox.setValue('No result!');
         }
     }
     setTimeout(function () {
         searchbox.hide();
         searchbox.clear();
-    }, 100);
+    }, 800);
 }
+
+function capitalize(string) {
+    var wordList = string.split(' ');
+    var newWordList = []
+    wordList.forEach(function(word) {
+        var first = word.charAt(0);
+        console.log(word)
+        const firstLetterCap = first.toUpperCase()
+
+        const remainingLetters = word.slice(1)
+        const newWord = firstLetterCap + remainingLetters;
+        newWordList.push(newWord)
+    })
+    const newWords = newWordList.join(" ");
+    return newWords;
+}
+
 
 window.addEventListener("load", (event) => {
     setMap();
+    initializing();
     console.log(count)
     makePieChart(count);
 });
