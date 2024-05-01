@@ -108,17 +108,17 @@
     width: 23%;
 }
 
-.reset {
+#reset {
     position: absolute;
     overflow: auto;
     background: url('../img/reset.png');
     background-color: white;
-    border-radius: 12px;
+    border-radius: 25px;
     border-color: black;
     right: 24%;
-    top: 12%;
-    height: 32px;
-    width: 32px;
+    top: 11.5%;
+    height: 40px;
+    width: 40px;
     z-index: 1000;
     cursor: pointer;
 }

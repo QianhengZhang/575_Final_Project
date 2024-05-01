@@ -41,6 +41,35 @@ const officialLanguage = [
     "worldlang_Spanish_country",
     ]
 
+function initializing(){
+    searchbox = L.control.searchbox({
+        position: 'topleft',
+        expand: 'left',
+        autocompleteFeatures: ['setValueOnClick']
+    }).addTo(map);
+    searchbox.onButton("click", search);
+    searchbox.onInput("keyup", function (e) {
+        if (e.keyCode == 13) {
+            search();
+        } else {
+            var value = searchbox.getValue();
+            if (value != "") {
+                var languageResults = fuseLanguage.search(value);
+                var countryResults = fuseCountry.search(value);
+                console.log(languageResults)
+                console.log(countryResults.map(res => res.item).slice(0, 5))
+                searchbox.setItems(countryResults.map(res => res.item).slice(0, 5).concat(languageResults.map(res => res.item).slice(0, 5)));
+            } else {
+                searchbox.clearItems();
+            }
+        }
+    });
+    addCheckBoxFunctions()
+    getCountry();
+    document.getElementById('reset').addEventListener('click', function(e){
+        reset();
+    })
+}
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
@@ -66,36 +95,7 @@ function setMap(){
     L.control.zoom({
         position: 'bottomright'
     }).addTo(map);
-
-    searchbox = L.control.searchbox({
-        position: 'topleft',
-        expand: 'left',
-        autocompleteFeatures: ['setValueOnClick']
-    }).addTo(map);
-    searchbox.onButton("click", search);
-    searchbox.onInput("keyup", function (e) {
-        if (e.keyCode == 13) {
-            search();
-        } else {
-            var value = searchbox.getValue();
-            if (value != "") {
-                var languageResults = fuseLanguage.search(value);
-                var countryResults = fuseCountry.search(value);
-                console.log(languageResults)
-                console.log(countryResults.map(res => res.item).slice(0, 5))
-                searchbox.setItems(countryResults.map(res => res.item).slice(0, 5).concat(languageResults.map(res => res.item).slice(0, 5)));
-            } else {
-                searchbox.clearItems();
-            }
-        }
-    });
-    addCheckBoxFunctions()
-    //searchbox.onInput("click", searchCountry(map, searchbox.getValue()))
-    //call getData function
     getData();
-    getCountry();
-    console.log(Object.keys(searchItemsLanguages))
-
     setHeatMap(Object.keys(count));
     disableCheckBox()
     //drawPie(count)
@@ -117,6 +117,7 @@ function setMap(){
         }
         console.log("Current Zoom Level = " + zoomlevel);
     });
+
 };
 
 function getData(map) {
@@ -426,6 +427,7 @@ function caculateCurrentShownElements() {
         "nearly_extinct": 0,
         "extinct": 0
     }
+    var shown = document.querySelectorAll('.show');
     shown.forEach(function(element) {
         element.classList.forEach(function(className) {
             //console.log(className);
@@ -440,7 +442,21 @@ function caculateCurrentShownElements() {
 }
 
 function reset() {
-
+    console.log('reset')
+    count = {
+        "moribund": 642,
+        "shifting": 2976,
+        "threatened": 1376,
+        "nearly_extinct": 332,
+        "extinct": 330
+    }
+    var checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = true;
+    })
+    map.remove();
+    setMap();
+    makePieChart(count);
 }
 
 function makePieChart(data) {
@@ -585,6 +601,7 @@ function search() {
 
 window.addEventListener("load", (event) => {
     setMap();
+    initializing();
     console.log(count)
     makePieChart(count);
 });
