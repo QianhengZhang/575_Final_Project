@@ -78,7 +78,7 @@ function setMap(){
     //customized mapbox layer: ancient chinese style
     //var map = L.map('map5').setView([34.25, 108.94], 9);
     var accessToken = "pk.eyJ1IjoibWxlaGFuZSIsImEiOiJjbG00NzJxNHIwdnQxM3FsZno2NXExeXN6In0.5sv_6g0kMbsjJHYEIJB_Uw";
-    var id = "mlehane/clvcpzcgy01b701qlffzn9n9h";
+    var id = "mlehane/clvcpzcgy01b701qlffzn9n9h/draft";
     L.tileLayer(`https://api.mapbox.com/styles/v1/${id}/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         tileSize: 512,
@@ -301,11 +301,11 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
-    //var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p><p><b>" + "Speaking Population:" + ":</b> " + feature.properties[attribute] + "</p>";
+    var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
     //bind the popup to the circle marker
-    // layer.bindPopup(popupContent, {
-    //     offset: new L.Point(0,-options.radius)
-    // });
+    layer.bindPopup(popupContent, {
+        offset: new L.Point(0,-options.radius)
+    });
     layer.on('click', (e) => {
         onClick(e, feature.properties);
     })
@@ -378,15 +378,16 @@ function onClick(e, properties) {
     item.classList.remove('highlight');
     var panel = document.getElementById("info");
     panel.innerHTML = "";
-    console.log(properties)
+    console.log(properties, "info")
     var title = document.createElement("div");
-    title.innerHTML = "SocioEconomic Factors";
+    title.innerHTML = properties.id_name_lang, "Language";
     title.classList.add('info_title');
     panel.appendChild(title);
-    panel.appendChild(contentWrapper("Language Name: ", properties.id_name_lang));
-    panel.appendChild(contentWrapper("Area: ", properties.lang_subregion_lang));
-    panel.appendChild(contentWrapper("Region Coverage: ", listToText('area', properties)));
-    panel.appendChild(contentWrapper("Local Official Language: ", listToText('language', properties)));
+    //panel.appendChild(contentWrapper("Language Name: ", properties.id_name_lang));
+    panel.appendChild(contentWrapper("Speaking Population: ", properties["lang_L1.POP_lang"]));
+    panel.appendChild(contentWrapper("Region: ", properties.lang_subregion_lang));
+    //panel.appendChild(contentWrapper("Region Coverage: ", listToText('area', properties)));
+    panel.appendChild(contentWrapper("Official Local Language: ", listToText('language', properties)));
     panel.appendChild(contentWrapper("GDP: ", properties["soceco_gdp.pcap.10yrmed_country"]));
     panel.appendChild(contentWrapper("GINI Index: ", properties["soceco_Gini.SWIID.10yr.median_country"]));
     panel.appendChild(contentWrapper("Education Expense: ", properties["edu_Mean.yr.school.10yr.median_country"]));
@@ -513,8 +514,8 @@ function reset() {
 }
 
 function makePieChart(data) {
-    const width = 300,
-    height = 300,
+    const width = 240,
+    height = 240,
     margin = 40;
     document.querySelector('#chart').innerHTML="";
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.

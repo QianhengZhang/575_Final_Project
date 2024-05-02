@@ -22,19 +22,19 @@
     height: 10%;
     left: 0px;
     top: 0px;
-    background-color: #D8CA9B;
+    background-color: #ddd7cc;
 }
 #title {
     position: absolute;
     top: 1%;
     left: 3%;
-    font-size: 80px;
+    font-size: 4em;
     font-family: "Jomhuria", serif;
 }
 
 #panel {
     position: absolute;
-    background-color: rgb(137, 217, 205);
+    background-color: #ddd7cc;
     right:0px;
     width: 23%;
     height: 90%;
@@ -86,13 +86,17 @@
     right: 0;
     top: 5.5%;
     height: 20%;
-    margin-top: 40px;
+    margin-top: 1%;
+    margin-left: 10%;
+    padding-left: 10%;
     width: 23%;
     display: flex;
     flex-direction: column;
-    border-bottom: solid black;
+    border-bottom: solid rgb(255, 255, 255);
     border-radius: 1px;
-    text-align: center;
+    text-align: left;
+    text-indent: 2%;
+    font-size: 1em;
 }
 
 .container {
@@ -100,22 +104,21 @@
 }
 
 #info {
-    bottom: 0;
-    right: 0;
+    bottom: 0%;
+    right: 0%;
     top: 25%;
     height: 30%;
-    margin-top: 40px;
     width: 23%;
-    border-bottom: solid black;
+    border-bottom: solid white;
     border-radius: 1px;
 }
 
 #chart {
-    bottom: 0;
-    right: 0;
-    top: 60%;
+    bottom: 0%;
+    right: 0%;
+    top: 50%;
     height: 40%;
-    margin-top: 40px;
+    margin-top: 5%;
     width: 23%;
 }
 
@@ -168,6 +171,31 @@ input#extinct_check {
     accent-color: #5B5354;
 }
 
+.square {
+    width: 10px;
+    height: 10px;
+}
+
+#moribund_square {
+    background-color: #DE2D26;
+}
+
+#shifting_square {
+    accent-color: #FC9272;
+}
+
+#threatened_square {
+    accent-color: #FCBBA1;
+}
+
+#nearly_extinct_square {
+    accent-color: #FB6A4A;
+}
+
+#extinct_square{
+    accent-color: #5B5354;
+}
+
 #info_placeholder {
     position: relative;
     top: 45%;
@@ -175,14 +203,17 @@ input#extinct_check {
 
 .info_content {
     position: relative;
-    top:30%;
+    top: 20%;
+    font-size: 1em;
+    text-align: left;
+    padding-left: 5%;
 }
 
 .info_title {
     position: relative;
-    top:30%;
-    font-style: bold;
-    font-size: 20;
+    top:15%;
+    font-weight: bold;
+    font-size: 1em;
 }
 
 path:hover {
@@ -203,6 +234,7 @@ path:hover {
     border: solid thin #fff;
     padding: 5px 10px;
     z-index: 1000;
+    text-align: left;
 }
 
 .infolabel h1 {
