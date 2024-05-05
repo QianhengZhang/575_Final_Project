@@ -98,7 +98,8 @@ function setMap(){
     }).addTo(map);
     getData();
     setHeatMap(Object.keys(count));
-    disableCheckBox()
+    // map.removeLayer(heatmapLayer);
+    // map.addLayer(propSymbolLayer);
     //drawPie(count)
     // map.on("zoomend", function() {
     //     var zoomlevel = map.getZoom();
@@ -118,7 +119,12 @@ function setMap(){
     //     }
     //     console.log("Current Zoom Level = " + zoomlevel);
     // });
-
+    document.getElementById("infoButton").addEventListener("click", function() {
+        toggleInformation();
+    });
+    document.getElementById("close").addEventListener("click", function() {
+        document.getElementById("popup").style.display = "none";
+    });
 };
 
 function getData(map) {
@@ -184,7 +190,7 @@ function makeHeatMap(data) {
       console.log(data.length)
       heatmapLayer = new HeatmapOverlay(cfg);
       heatmapLayer.setData(data);
-      heatmapLayer.addTo(map);
+    //   heatmapLayer.addTo(map);
 
 }
 
@@ -320,7 +326,7 @@ function createPropSymbols(data, attributes){
             return pointToLayer(feature, latlng, attributes);
         }
     });
-    //propSymbolLayer.addTo(map);
+    propSymbolLayer.addTo(map);
 };
 
 //create legend
@@ -350,7 +356,7 @@ function createLegend(attributes) {
 				var cy = 100 - radius;
 
 				//circle string
-				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
 
 				//Step 4: create legend text to label each circle
 				var textY = i * 30 + 22;
@@ -694,17 +700,18 @@ function capitalize(string) {
     return newWords;
 }
 
+function toggleInformation() {
+    if (document.getElementById("popup").style.display == "block"){
+        document.getElementById("popup").style.display = "none";
+    } else {
+        document.getElementById("popup").style.display = "block";
+    }
+}
 
 window.addEventListener("load", (event) => {
     setMap();
+    document.getElementById("popup").style.display = "none";
     initializing();
     console.log(count)
     makePieChart(count);
-    document.getElementById("infoButton").addEventListener("click", function() {
-        document.getElementById("popup").style.display = "block";
-    });
-
-    document.getElementById("close").addEventListener("click", function() {
-        document.getElementById("popup").style.display = "none";
-    });
 });
