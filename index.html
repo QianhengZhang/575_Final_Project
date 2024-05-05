@@ -30,9 +30,12 @@
         <div id = "background"></div>
         <div id="title-background">
         </div>
-        <span id="reset"></span>
+        <span class="icon" id="reset"></span>
+        <span class="icon" id="infoButton"></span>
+        <a href="https://github.com/QianhengZhang/575_Final_Project" target="_blank">
+        <span class="icon" id="github"></span></a>
         <div id="title">
-            World Endangered Language Map - World outside of English Speakers
+            World Endangered Language Map
         </div>
 
         <div id="map">
@@ -41,37 +44,45 @@
         <div id="panel">
         </div>
         <div class='map-overlay' id="filter">
-            <h4>Select Endangerment Levels</h4> 
+            <h4>Select Endangerment Levels</h4>
             <label class="container" id="moribund_box">Moribund
+                <div class="box" id="moribund_color"></div>
                 <input type="checkbox" id="moribund_check" checked="checked">
                 <span class="checkmark"></span>
             </label>
-
-             <label class="container" id="shifting_box">Shifting
+            <label class="container" id="shifting_box">Shifting
+                <div class="box" id="shifting_color"></div>
                 <input type="checkbox" id="shifting_check" checked="checked">
                 <span class="checkmark"></span>
             </label>
-
             <label class="container" id="threatened_box">Threatened
+                <div class="box" id="threatened_color"></div>
                 <input type="checkbox" id="threatened_check" checked="checked">
                 <span class="checkmark"></span>
             </label>
-
             <label class="container" id="nearly_exitinct_box">Nearly Extinct
+                <div class="box" id="nearly_extinct_color"></div>
                 <input type="checkbox" id="nearly_extinct_check" checked="checked">
                 <span class="checkmark"></span>
             </label>
-
             <label class="container" id="extinct_box">Extinct
-                    <input type="checkbox" id="extinct_check" checked="checked">
-                    <span class="checkmark"></span>
-                </label>
+                <div class="box" id="extinct_color"></div>
+                <input type="checkbox" id="extinct_check" checked="checked">
+                <span class="checkmark"></span>
+            </label>
         </div>
         <div class='map-overlay' id="info">
             <span id="info_placeholder">Zoom in to see more!</span>
         </div>
-        <div class='map-overlay chart' id="chart"></div>
+        <div class='map-overlay' id="chart"></div>
 
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close" id="close">&times;</span>
+                <h2>Information Page</h2>
+                <p>Write introduction of this project and data sources</p>
+            </div>
+        </div>
         <!--put your external script links here-->
         <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
         <script src="lib/heatmap.js"></script>

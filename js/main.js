@@ -70,8 +70,8 @@ function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
-        center: [10, 20],
-        zoom: 2.5
+        center: [40, -100],
+        zoom: 5
     });
     //add OSM base tilelayer
 
@@ -100,24 +100,24 @@ function setMap(){
     setHeatMap(Object.keys(count));
     disableCheckBox()
     //drawPie(count)
-    map.on("zoomend", function() {
-        var zoomlevel = map.getZoom();
-        if (zoomlevel > 4.5) {
-            if (map.hasLayer(heatmapLayer)) {
-                map.removeLayer(heatmapLayer);
-            }
-            map.addLayer(propSymbolLayer);
-            enableCheckBox();
-        }else if (zoomlevel <= 4.5) {
-            if (map.hasLayer(propSymbolLayer)) {
-                map.removeLayer(propSymbolLayer);
+    // map.on("zoomend", function() {
+    //     var zoomlevel = map.getZoom();
+    //     if (zoomlevel > 4.5) {
+    //         if (map.hasLayer(heatmapLayer)) {
+    //             map.removeLayer(heatmapLayer);
+    //         }
+    //         map.addLayer(propSymbolLayer);
+    //         enableCheckBox();
+    //     }else if (zoomlevel <= 4.5) {
+    //         if (map.hasLayer(propSymbolLayer)) {
+    //             map.removeLayer(propSymbolLayer);
 
-            }
-            map.addLayer(heatmapLayer);
-            disableCheckBox();
-        }
-        console.log("Current Zoom Level = " + zoomlevel);
-    });
+    //         }
+    //         map.addLayer(heatmapLayer);
+    //         disableCheckBox();
+    //     }
+    //     console.log("Current Zoom Level = " + zoomlevel);
+    // });
 
 };
 
@@ -342,17 +342,17 @@ function createLegend(attributes) {
 			//array of circle names to base loop on
 			var circles = ["max", "mean", "min"];
 
-			//Step 2: loop to add each circle and text to svg string  
+			//Step 2: loop to add each circle and text to svg string
 			for (var i = 0; i < circles.length; i++) {
 
-				//Step 3: assign the r and cy attributes  
+				//Step 3: assign the r and cy attributes
 				var radius = calcPropRadius(dataStats[circles[i]]);
 				var cy = 100 - radius;
 
-				//circle string  
+				//circle string
 				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="50"/>';
 
-				//Step 4: create legend text to label each circle     				          
+				//Step 4: create legend text to label each circle
 				var textY = i * 30 + 22;
 				svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">' + Math.round(dataStats[circles[i]] * 100) / 100 + '</text>';
 
@@ -367,7 +367,7 @@ function createLegend(attributes) {
 			container.insertAdjacentHTML('beforeend', svg);
 			return container;
 
-            
+
 		}
 	});
 	map.addControl(new LegendControl());
@@ -484,7 +484,7 @@ function caculateCurrentShownElements() {
     shown.forEach(function(element) {
         element.classList.forEach(function(className) {
             //console.log(className);
-            console.log(Object.keys(count))
+            //console.log(Object.keys(count))
             if (Object.keys(count).includes(className)) {
                 count[className] += 1;
             }
@@ -495,29 +495,35 @@ function caculateCurrentShownElements() {
 }
 
 function reset() {
-    console.log('reset')
-    count = {
-        "moribund": 642,
-        "shifting": 2976,
-        "threatened": 1376,
-        "nearly_extinct": 332,
-        "extinct": 330
+    if (map.hasLayer(heatmapLayer)) {
+        map.removeLayer(heatmapLayer);
+        map.addLayer(propSymbolLayer);
+        var unCheckedBoxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
+        unCheckedBoxes.forEach(function(checkbox) {
+            var level = checkbox.id.replace("_check", "");
+            var countries = document.querySelectorAll('.'+ level);
+            countries.forEach(function(country){
+                toggleElements(country);
+            });
+        })
+        enableCheckBox();
+    } else {
+        map.removeLayer(propSymbolLayer);
+        map.addLayer(heatmapLayer);
+        disableCheckBox();
     }
-    var checkboxes = document.querySelectorAll("input[type=checkbox]");
-    checkboxes.forEach(function(checkbox) {
-        checkbox.checked = true;
-    })
-    document.getElementById('info').innerHTML = '<span id="info_placeholder">Zoom in to see more!</span>'
-    map.remove();
-    setMap();
-    makePieChart(count);
 }
 
 function makePieChart(data) {
-    const width = 240,
-    height = 240,
-    margin = 40;
-    document.querySelector('#chart').innerHTML="";
+    const width = 300,
+    height = 300,
+    margin = 30;
+    var chart = document.querySelector('#chart');
+    chart.innerHTML="";
+    var chartTitle = document.createElement('h4');
+    chartTitle.textContent = "Language Distribution";
+    chartTitle.id = "chartTitle";
+    chart.appendChild(chartTitle)
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     const radius = Math.min(width, height) / 2 - margin;
 
@@ -565,6 +571,25 @@ function update(data, svg, radius, color) {
       .attr("stroke", "white")
       .style("opacity", 1)
 
+    var arcGenerator = d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius)
+
+    u
+      .enter()
+      .append('text')
+      .text(function(d){
+        if (d.data[1] >0) {
+            return d.data[0]}
+        })
+      .attr("transform", function(d) {
+        var location = arcGenerator.centroid(d);
+        //location[0] =- 3;
+        //location[1] =- 3;
+        return "translate(" + location + ")";  })
+      .style("text-anchor", "middle")
+      .style("font-size", 12)
+      .style("color", "white")
     d3.selectAll("path")
     //.on("click", (event, d) => piefilter(d))
     .on("mouseover", (event, d) => setLabel(d))
@@ -583,8 +608,7 @@ function setLabel(props){
     })
     var percentage = (props.data[1] / sum * 100).toFixed(2);
     console.log(percentage)
-    var labelAttribute = "<h1>" +props.data[0] +
-     ": </h1><b>" +percentage + "%</b>";
+    var labelAttribute = "<b>" +percentage + "%</b>";
     //create info label div
     var infolabel = d3.select("body")
         .append("div")
@@ -676,4 +700,11 @@ window.addEventListener("load", (event) => {
     initializing();
     console.log(count)
     makePieChart(count);
+    document.getElementById("infoButton").addEventListener("click", function() {
+        document.getElementById("popup").style.display = "block";
+    });
+
+    document.getElementById("close").addEventListener("click", function() {
+        document.getElementById("popup").style.display = "none";
+    });
 });
