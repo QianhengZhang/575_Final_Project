@@ -180,6 +180,13 @@ function setHeatMap(categories) {
 function makeHeatMap(data) {
     var cfg = {
         "radius": 7,
+        "gradient": {
+            // enter n keys between 0 and 1 here
+            // for gradient color customization
+            '.5': 'yellow',
+            '.8': 'orange',
+            '.95': 'red'
+          },
         "maxOpacity": .8,
         "scaleRadius": true,
         "useLocalExtrema": true,
@@ -521,8 +528,8 @@ function reset() {
 }
 
 function makePieChart(data) {
-    const width = 300,
-    height = 300,
+    const width = 260,
+    height = 260,
     margin = 30;
     var chart = document.querySelector('#chart');
     chart.innerHTML="";
@@ -581,7 +588,7 @@ function update(data, svg, radius, color) {
       .innerRadius(0)
       .outerRadius(radius)
 
-    u
+    u //the pie chart labels
       .enter()
       .append('text')
       .text(function(d){
@@ -594,7 +601,7 @@ function update(data, svg, radius, color) {
         //location[1] =- 3;
         return "translate(" + location + ")";  })
       .style("text-anchor", "middle")
-      .style("font-size", 12)
+      .style("font-size", 8)
       .style("color", "white")
     d3.selectAll("path")
     //.on("click", (event, d) => piefilter(d))

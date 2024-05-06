@@ -1,17 +1,18 @@
 /*insert style here*/
 
 #background {
-    position: absolute;
+    position: top;
     width: 100%;
     height: 100%;
     background-color: rgb(235, 220, 202);
     left: 0px;
 }
+
 #map {
     position: absolute;
     top: 10%;
-    bottom: 5%;
-    left: 1px;
+    bottom: 0%;
+    left: 0%;
     width: 80%;
     height: 90%;
   }
@@ -27,8 +28,8 @@
 #title {
     position: absolute;
     top: 1%;
-    left: 3%;
-    font-size: 5em;
+    left: 1%;
+    font-size: 4em;
     font-family: "Jomhuria", serif;
 }
 
@@ -40,6 +41,7 @@
     height: 90%;
     top:10%;
     border-left-color: black;
+    bottom: 0%;
 }
 
 #search {
@@ -57,10 +59,10 @@
 	width: 180px;
 	height: 160px;
 	background-color: rgba(255, 255, 255, 0.8);
-	padding-left: 10px;
+	padding-left: 5px;
 	padding-right: 10px;
-	padding-bottom: 5px;
-	text-align: center;
+	padding-bottom: 0%;
+	text-align: left;
 	border: solid gray 1px;
 	border-radius: 10px;
 }
@@ -81,24 +83,24 @@
     text-align: center;
     border-left:solid rgb(255, 255, 255);
     border-radius: 1px;
+    margin-top: 0%;
 
 }
 
 #filter {
-    bottom: 0;
+    bottom: 0%;
     right: 0;
     top: 8%;
     height: 20%;
-    margin-top: 1%;
+    margin-top: 0.5%;
     margin-left: 10%;
     padding-left: 10%;
     width: 20%;
     display: flex;
     flex-direction: column;
     border-bottom: solid rgb(255, 255, 255);
-    border-radius: 1px;
     text-align: left;
-    text-indent: 5%;
+    text-indent: 2%;
     font-size: 1em;
 }
 
@@ -112,8 +114,10 @@
     top: 30%;
     height: 30%;
     width: 20%;
-    border-bottom: solid white;
+    border-bottom: 1px solid white;
+    border-left: 1px solid rgb(255, 255, 255);
     border-radius: 1px;
+    margin-top: 0%;
 }
 
 #chart {
@@ -140,27 +144,31 @@
 #reset {
     background: url('../img/reset.png');
     background-color: white;
-    top: 11.5%;
+    height: 32px;
+    width: 32px;
+    top: 11%;
+    right: 20.5%;
 }
 
 #infoButton {
     background: url('../img/info.png');
     background-color: white;
-    top: 21%;
+    top: 17%;
     height: 32px;
     width: 32px;
     border-radius: 25px;
-    right: 20.2%;
+    right: 20.5%;
 }
 
 #github {
     background: url('../img/github.png');
     background-color: white;
-    top: 16%;
+    top: 75%;
     height: 40px;
     width: 40px;
     border-radius: 25px;
-    right: 20%;
+    right: 20.5%;
+    position: bottom;
 }
 
 .icon:hover {
@@ -229,17 +237,21 @@ input#extinct_check {
 
 .info_content {
     position: relative;
-    top: 20%;
-    font-size: 1em;
+    top: 5%;
+    font-size: 0.95em;
     text-align: left;
     padding-left: 5%;
+    margin-bottom: 0%;
+    margin-top: 1%;
 }
 
 .info_title {
     position: relative;
-    top:15%;
+    top:5%;
     font-weight: bold;
     font-size: 1em;
+    margin-bottom: 0%;
+    margin-top: 1%;
 }
 
 path:hover {
@@ -260,7 +272,7 @@ path:hover {
     border: solid thin #fff;
     padding: 5px 10px;
     z-index: 1000;
-    text-align: left;
+    text-align: center;
 }
 
 .infolabel h1 {
@@ -268,12 +280,13 @@ path:hover {
     padding: 0;
     display: inline-block;
     line-height: 1em;
+
 }
 
 .box {
     float: left;
-    margin-top: 2px;
-    margin-left: 100px;
+    margin-top: 1%;
+    margin-left: 5%;
     height: 15px;
     width: 15px;
     clear: both;
@@ -282,7 +295,10 @@ path:hover {
 
 
 #filter h4 {
-    margin-left: 40px;
+    margin-left: 2.5%;
+    text-align: left;
+    margin-bottom: 0%;
+    margin-top: 1%;
 }
 
 /* #chart svg {
@@ -291,7 +307,8 @@ path:hover {
 
 #chartTitle {
     z-index: 1000;
-    margin-top: 30px;
+    margin-top: 4%;
+    margin-bottom: 0%;
 }
 
 .popup {
