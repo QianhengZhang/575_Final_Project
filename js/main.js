@@ -9,11 +9,11 @@ dataStats = {};
 searchItemsLanguages = {};
 searchItemsCountries = {};
 count = {
-    "moribund": 642,
-    "shifting": 2976,
-    "threatened": 1376,
-    "nearly_extinct": 332,
-    "extinct": 330
+    "Moribund": 642,
+    "Shifting": 2976,
+    "Threatened": 1376,
+    "Nearly Extinct": 332,
+    "Extinct": 330
 }
 
 const locationCoverage = ["Africa",
@@ -347,33 +347,55 @@ function createLegend(attributes) {
 			// create the control container with a particular class name
 			var container = L.DomUtil.create('div', 'legend-control-container');
 
-			container.innerHTML = '<h3 class="temporalLegend"> Total Number of Speakers</h3>';
+			container.innerHTML = '<h3 class="temporalLegend">Total Number of Speakers</h3>';
 
 			//Step 1: start attribute legend svg string
 			var svg = '<svg id="attribute-legend" width="180px" height="150px">';
-
 			//array of circle names to base loop on
 			var circles = ["max", "mean", "min"];
 
 			//Step 2: loop to add each circle and text to svg string
 			for (var i = 0; i < circles.length; i++) {
 
-				//Step 3: assign the r and cy attributes
-				var radius = calcPropRadius(dataStats[circles[i]]);
-				var cy = 100 - radius;
+                var radius = calcPropRadius(dataStats[circles[i]]);
 
-				//circle string
-				svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+                if (circles[i]=="min"){
+                    radius = 10;
+                    var cy = 100 - radius;
 
-				//Step 4: create legend text to label each circle
-				var textY = i * 30 + 22;
-				svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">' + Math.round(dataStats[circles[i]] * 100) / 100 + '</text>';
+                    //circle string
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
 
+				    //Step 4: create legend text to label each circle
+				    var textY = i * 30 + 22;
+				    svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">< 10,000</text>';
+                }
+                else if (circles[i]=="mean"){
+                    radius = 24;
+                    var cy = 100 - radius;
+
+                    //circle string
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+
+				    //Step 4: create legend text to label each circle
+				    var textY = i * 30 + 22;
+				    svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">1 million</text>';
+                }
+                else {
+                    var cy = 100 - radius;
+
+                    //circle string
+                    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+
+                    //Step 4: create legend text to label each circle
+                    var textY = i * 30 + 22;
+                    svg += '<text id="' + circles[i] + '-text" x="120" y="' + textY + '">> 37 million</text>';
+                }
 			};
 
 			//add annotation to include the values below threshold
 			//svg += '<text x="70" y="65">(and below)</text>';
-			//svg += "</svg>";
+			svg += "</svg>";
 			//svg += '<svg><circle class="legend-circle" id="nullCircle" r="' + 1 + '"cy="' + 10 + '" fill="#ffffff" fill-opacity="0.8" stroke="#000000" cx="35"/><text x="70" y="14">Zero or N/A</text></svg>';
 
 			//add attribute legend svg to container
@@ -528,13 +550,13 @@ function reset() {
 }
 
 function makePieChart(data) {
-    const width = 260,
-    height = 260,
+    const width = 220,
+    height = 220,
     margin = 30;
     var chart = document.querySelector('#chart');
     chart.innerHTML="";
     var chartTitle = document.createElement('h4');
-    chartTitle.textContent = "Language Distribution";
+    chartTitle.textContent = "Endangerment Distribution";
     chartTitle.id = "chartTitle";
     chart.appendChild(chartTitle)
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -588,7 +610,7 @@ function update(data, svg, radius, color) {
       .innerRadius(0)
       .outerRadius(radius)
 
-    u //the pie chart labels
+    /*u //the pie chart labels
       .enter()
       .append('text')
       .text(function(d){
@@ -602,7 +624,7 @@ function update(data, svg, radius, color) {
         return "translate(" + location + ")";  })
       .style("text-anchor", "middle")
       .style("font-size", 8)
-      .style("color", "white")
+      .style("color", "white")*/
     d3.selectAll("path")
     //.on("click", (event, d) => piefilter(d))
     .on("mouseover", (event, d) => setLabel(d))
@@ -612,16 +634,15 @@ function update(data, svg, radius, color) {
 
 function setLabel(props){
     //label content
-    console.log(props.data[1])
     var sum = 0;
-    console.log(count)
+    console.log(count, "count")
     Object.values(count).forEach(function(number){
         console.log(number)
         sum += number;
     })
     var percentage = (props.data[1] / sum * 100).toFixed(2);
-    console.log(percentage)
-    var labelAttribute = "<b>" +percentage + "%</b>";
+    var level = [props.data[0]];
+    var labelAttribute = "<b>" + level + ": " + percentage + "%</b>";
     //create info label div
     var infolabel = d3.select("body")
         .append("div")
