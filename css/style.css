@@ -142,7 +142,7 @@
 }
 
 #reset {
-    background: url('../img/reset.png');
+    background-image: url('../img/Reexpress.svg');
     background-color: white;
     height: 32px;
     width: 32px;
@@ -151,7 +151,7 @@
 }
 
 #infoButton {
-    background: url('../img/info.png');
+    background: url('../img/Info.svg');
     background-color: white;
     top: 17%;
     height: 32px;
@@ -161,13 +161,13 @@
 }
 
 #github {
-    background: url('../img/github.png');
+    background: url('../img/Github.svg');
     background-color: white;
-    top: 75%;
-    height: 40px;
-    width: 40px;
+    top: 79%;
+    height: 32px;
+    width: 32px;
     border-radius: 25px;
-    right: 20.5%;
+    right: 20.9%;
     position: bottom;
 }
 
