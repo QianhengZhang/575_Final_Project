@@ -32,6 +32,7 @@
     border-bottom-left-radius: 20px 50%;
     border-right: none;
     padding: 0px 0px 0px 15px;
+    height: 31px;
 }
 
 .leaflet-searchbox-wrapper .leaflet-searchbox-right {
@@ -39,10 +40,12 @@
     border-bottom-right-radius: 20px 50%;
     border-left: none;
     padding: 0px 15px 0px 0px;
+    height: 33px;
 }
 
 .leaflet-searchbox-wrapper .leaflet-searchbox-button {
-    width: 40px;
+    height: 33px;
+    width:33px;
     transition-delay: 0s;
     z-index: 702;
 }
@@ -76,7 +79,7 @@
 .leaflet-searchbox-container .leaflet-searchbox-autocomplete {
     position: absolute;
     top: 20px;
-    width: 99.5%;
+    width: 99.4%;
     list-style-type: none;
     margin: 0px;
     padding: 20px 0px 0px 0px;
