@@ -27,11 +27,26 @@
     z-index:100;
 }
 
+h2 {
+    text-align: left;
+    margin-left: 2%;
+    font-family: "IM Fell English", serif;
+
+}
+
 h3 {
     text-align: center;
     margin-left: 2%;
     font-family: "IM Fell English", serif;
 
+}
+
+.popupContent-text {
+    text-align: left;
+    margin-left: 2%;
+    font-family: "IM Fell English", serif;
+    font-style: italic;
+    font-size:17px;
 }
 
 #max-text {
@@ -93,8 +108,6 @@ h3 {
     border-radius: 3px !important;
 }
 
-
-
 #panel {
     position: absolute;
     background-color: #ddd7cc;
@@ -106,16 +119,6 @@ h3 {
     bottom: 0%;
 }
 
-#search {
-    position: absolute;
-    fill: rgb(5, 254, 254);
-    right:20px;
-    width: 18%;
-    height: 30px;
-    top:10%;
-    border-left-color: black;
-    z-index: 20;
-}
 
 .legend-control-container {
 	width: 180px;
@@ -400,7 +403,7 @@ path:hover {
     padding: 20px;
     border-radius: 5px;
     text-align: center;
-    font-family: IM Fell English, sans-serif;
+    font-family: IM Fell English, sans-serif !important;
 }
 
 .close {

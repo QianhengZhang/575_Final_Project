@@ -322,7 +322,10 @@ function pointToLayer(feature, latlng, attributes){
     }
 
     //build popup content string - Initializing
-    var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
+    // var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
+    var popupContent = "<h2> Language: " + feature.properties.id_name_lang + "</h2>" 
+                     + "<hr>" 
+                     + "<p class='popupContent-text'>        Click for more information</p>"
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-options.radius)
