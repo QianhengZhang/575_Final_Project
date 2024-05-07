@@ -16,6 +16,14 @@ count = {
     "extinct": 330
 }
 
+countChart = {
+    "Moribund": 642,
+    "Shifting": 2976,
+    "Threatened": 1376,
+    "Nearly Extinct": 332,
+    "Extinct": 330
+}
+
 const locationCoverage = ["Africa",
     "Arab",
     "Asia",
@@ -487,8 +495,8 @@ function addCheckBoxFunctions() {
             layers.forEach(function(layer) {
                 toggleElements(layer);
             })
-            count = caculateCurrentShownElements();
-            makePieChart(count)
+            countChart = caculateCurrentShownElements();
+            makePieChart(countChart)
         })
     })
     var checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
@@ -635,8 +643,8 @@ function update(data, svg, radius, color) {
 function setLabel(props){
     //label content
     var sum = 0;
-    console.log(count, "count")
-    Object.values(count).forEach(function(number){
+    console.log(countChart, "count")
+    Object.values(countChart).forEach(function(number){
         console.log(number)
         sum += number;
     })
@@ -659,8 +667,8 @@ function piefilter(props) {
     layers.forEach(function(layer) {
         toggleElements(layer);
     })
-    delete count[props.data[0]];
-    makePieChart(count);
+    delete countChart[props.data[0]];
+    makePieChart(countChart);
     removeLabel();
 }
 
@@ -741,5 +749,5 @@ window.addEventListener("load", (event) => {
     document.getElementById("popup").style.display = "none";
     initializing();
     console.log(count)
-    makePieChart(count);
+    makePieChart(countChart);
 });
