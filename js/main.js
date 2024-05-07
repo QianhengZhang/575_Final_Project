@@ -51,15 +51,15 @@ const officialLanguage = [
 
 function initializing(){
 
-    // Display the modal and ensure it is above other elements
-    var modal = document.getElementById("popup");
-    modal.style.display = "block";
+    // // Display the modal and ensure it is above other elements
+    // var modal = document.getElementById("popup");
+    // modal.style.display = "block";
 
-    // Close the modal when the close button is clicked
-    var closeButton = document.getElementById("close");
-    closeButton.addEventListener("click", function () {
-        modal.style.display = "none";
-    });
+    // // Close the modal when the close button is clicked
+    // var closeButton = document.getElementById("close");
+    // closeButton.addEventListener("click", function () {
+    //     modal.style.display = "none";
+    // });
 
     searchbox.onButton("click", search);
     searchbox.onInput("keyup", function (e) {
