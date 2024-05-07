@@ -46,6 +46,13 @@ h3 {
 
 }
 
+h4 {
+    text-align: center;
+    margin-left: 2%;
+    font-family: "IM Fell English", serif;
+    padding-bottom:2%;
+}
+
 /* pop-up in map */
 .popupContent-text {
     text-align: left;
@@ -58,19 +65,19 @@ h3 {
 }
 
 #max-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
 
 #mean-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
 
 #min-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
@@ -166,7 +173,7 @@ hr {
 
 /* style popup */
 .leaflet-popup {
-    background-color: #fafaf9 !important;  
+    background-color: white !important;  
     border: none;
 }
 
@@ -185,7 +192,7 @@ hr {
 .leaflet-popup-content {
     z-index: 1000;
     /* background-color: #9b8571 !important; */
-    background-color: #fafaf9 !important;
+    background-color: white !important;
     padding: 16px;
     color: #0f0f0f;
     border: none;
@@ -254,11 +261,11 @@ path:hover {
 
 
 .legend-control-container {
-	width: 180px;
+	width: 190px;
 	height: 160px;
 	background-color: rgba(221, 215, 204, 0.9);
 	padding-left: 5px;
-	padding-right: 10px;
+	padding-right: 5px;
 	padding-bottom: 0%;
     
 	text-align: left;
@@ -278,7 +285,7 @@ path:hover {
 /* language information panel */
 .map-overlay {
     position: absolute;
-    font-family: IM Fell English, sans-serif;
+    font-family: lato;
     overflow: auto;
     text-align: center;
     border-left:solid rgb(255, 255, 255);
@@ -330,6 +337,7 @@ path:hover {
     margin-top: 5%;
     margin-bottom: 0%;
     width: 20%;
+
 }
 
 /* icon and effect */
@@ -415,19 +423,19 @@ input#extinct_check {
 
 /* color */
 #shifting_color {
-    background-color: #FCBBA1;
+    background-color: #f4c6b4;
 }
 
 #threatened_color {
-    background-color: #FC9272;
+    background-color: #f89371;
 }
 
 #nearly_extinct_color {
-    background-color: #FB6A4A;
+    background-color: #f75d3a;
 }
 
 #moribund_color {
-    background-color: #DE2D26;
+    background-color: #b20a04;
 }
 
 #extinct_color{
@@ -448,6 +456,7 @@ input#extinct_check {
     padding-left: 5%;
     margin-bottom: 0%;
     margin-top: 1%;
+    font-family: "lato";
 }
 
 .info_title {
@@ -457,6 +466,7 @@ input#extinct_check {
     font-size: 1.4em;
     margin-bottom: 0%;
     margin-top: 1%;
+    font-family: "IM Fell English", serif;
 }
 
 
@@ -467,6 +477,7 @@ input#extinct_check {
 }
 
 
+/* popup for chart */
 .infolabel {
     position: absolute;
     height: 20px;
@@ -477,7 +488,7 @@ input#extinct_check {
     padding: 5px 10px;
     z-index: 1000;
     text-align: center;
-    font-family: IM Fell English, sans-serif;
+    font-family: lato;
     font-weight: 50;
 }
 
