@@ -10,29 +10,32 @@
 
 #map {
     position: absolute;
-    top: 10%;
+    top: 13%;
     bottom: 0%;
     left: 0%;
     width: 80%;
-    height: 90%;
+    height: 87%;
+    z-index:80;
   }
 
 #title-background {
+    background-image:url('../img/title-background.png');
     position: absolute;
     width: 100%;
-    height: 10%;
+    height: 13%;
     left: 0px;
     top: 0px;
     background-color: #ddd7cc;
-    border-bottom: solid 5px #000000;
     outline-offset: 10px;
+    z-index:90;
 }
 #title {
     position: absolute;
-    top: 1%;
-    left: 1%;
-    font-size: 4em;
-    font-family: "Jomhuria", serif;
+    top: 3%;
+    left: 2%;
+    font-size: 2.5em;
+    font-family: "IM Fell English", serif;
+    z-index:100;
 }
 
 #panel {
@@ -40,8 +43,8 @@
     background-color: #ddd7cc;
     right:0px;
     width: 20%;
-    height: 90%;
-    top:10%;
+    height: 87%;
+    top:13%;
     border-left-color: black;
     bottom: 0%;
 }
@@ -78,7 +81,7 @@ h3 {
 
 #popupContent {
     fill: #949185;
-    font-family: "Jomhuria", serif;
+    font-family: "IM Fell English", serif;
 }
 
 .hide {
@@ -156,14 +159,14 @@ h3 {
     background-color: white;
     height: 32px;
     width: 32px;
-    top: 11%;
+    top: 15%;
     right: 20.5%;
 }
 
 #infoButton {
     background: url('../img/Info.svg');
     background-color: white;
-    top: 17%;
+    top: 20%;
     height: 32px;
     width: 32px;
     border-radius: 25px;
@@ -173,11 +176,11 @@ h3 {
 #github {
     background: url('../img/Github.svg');
     background-color: white;
-    top: 79%;
+    top: 25%;
     height: 32px;
     width: 32px;
     border-radius: 25px;
-    right: 20.9%;
+    right: 20.5%;
     position: bottom;
 }
 
