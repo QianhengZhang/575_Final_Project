@@ -81,7 +81,7 @@ h3 {
   }
 
 /*  modal */
-.modal {
+.popop {
     display: none;
     position: fixed;
     top: 25%;
@@ -95,7 +95,7 @@ h3 {
     background-color: #fff;
 }
 
-.modal-content {
+.popop-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
