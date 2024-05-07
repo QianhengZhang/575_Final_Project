@@ -106,8 +106,13 @@ function setMap(){
     var width = window.innerWidth * 0.7;
     map = L.map('map', {
         center: [40, -100],
-        zoom: 5
+        zoom: 5,
+        maxBounds:[
+            [-90, -180],
+            [90, 180]
+        ]
     });
+
     //add OSM base tilelayer
 
     //customized mapbox layer: ancient chinese style
