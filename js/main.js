@@ -422,7 +422,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
 				    //Step 4: create legend text to label each circle
 				    var textY = i * 30 + 22;
@@ -433,7 +433,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
 				    //Step 4: create legend text to label each circle
 				    var textY = i * 30 + 22;
@@ -443,7 +443,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-                    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+                    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
                     //Step 4: create legend text to label each circle
                     var textY = i * 30 + 22;
@@ -690,7 +690,7 @@ function update(data, svg, radius, color) {
     .on("mousemove", moveLabel);
 }
 
-function setLabel(props){
+function setLabel(props){ //label for the pie chart
     //label content
     var sum = 0;
     console.log(countChart, "count")
@@ -710,7 +710,7 @@ function setLabel(props){
 
 };
 
-function piefilter(props) {
+function piefilter(props) { //updates to pie chart from filter
     console.log(props.data[0]);
     document.getElementById(props.data[0]+ "_check").checked = false;
     var layers = document.querySelectorAll("." + props.data[0]);
@@ -737,6 +737,7 @@ function moveLabel() {
         .style("top", y + "px");
 };
 
+//search function
 function search() {
     var value = searchbox.getValue();
     value = capitalize(value);
