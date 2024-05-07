@@ -321,18 +321,33 @@ function pointToLayer(feature, latlng, attributes){
         layer.setRadius(2);
     }
 
-    //build popup content string - Initializing
+    // Hover action and Popup Content
     // var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
     var popupContent = "<h2> Language: " + feature.properties.id_name_lang + "</h2>" 
                      + "<hr>" 
                      + "<p class='popupContent-text'>        Click for more information</p>"
-    //bind the popup to the circle marker
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius)
+    
+    // Create the popup instance
+    var popup = L.popup({
+        offset: new L.Point(0, -options.radius),
+        closeButton: false
+    }).setContent(popupContent);
+
+    // Bind the mouseover and mouseout events to the layer
+    layer.on('mouseover', function(e) {
+        // Show the popup when the mouse is over the layer
+        popup.setLatLng(e.latlng).openOn(map);
     });
+
+    layer.on('mouseout', function() {
+        // Close the popup when the mouse leaves the layer
+        map.closePopup(popup);
+    });
+
     layer.on('click', (e) => {
-        onClick(e, feature.properties);
-    })
+        onClick(e, feature.properties); // If still want to handle click events
+    });
+    
     return layer;
 };
 
