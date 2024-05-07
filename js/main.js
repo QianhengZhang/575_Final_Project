@@ -51,15 +51,32 @@ const officialLanguage = [
 
 function initializing(){
 
-    // // Display the modal and ensure it is above other elements
-    // var modal = document.getElementById("popup");
-    // modal.style.display = "block";
+    // Display the modal and ensure it is above other elements
+    var modal = document.getElementById("popup");
+    modal.style.display = "block";
 
-    // // Close the modal when the close button is clicked
-    // var closeButton = document.getElementById("close");
-    // closeButton.addEventListener("click", function () {
-    //     modal.style.display = "none";
-    // });
+    // Close the modal when the close button is clicked
+    var closeButton = document.getElementById("close");
+    closeButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+
+    // Close the modal when the user clicks anywhere outside of the modal content
+    window.addEventListener("click", function (event) {
+        var modal = document.querySelector("#popup .popup-content");
+        // Check if the click target is outside of the modal content
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modalAbout) {
+            modal.style.display = "none";
+        }
+    }
+
 
     searchbox.onButton("click", search);
     searchbox.onInput("keyup", function (e) {
