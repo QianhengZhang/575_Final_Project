@@ -81,7 +81,7 @@ h3 {
   }
 
 /*  modal */
-.modal {
+.popup {
     display: none;
     position: fixed;
     top: 25%;
@@ -94,7 +94,7 @@ h3 {
     align-items: center;
 }
 
-.modal-content {
+.popup-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
