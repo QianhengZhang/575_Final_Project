@@ -357,7 +357,7 @@ path:hover {
 #infoButton {
     background: url('../img/Info.svg');
     background-color: rgba(137, 90, 47, 0.632);
-    top: 1%;
+    top: 2%;
     height: 32px;
     width: 32px;
     border-radius: 25px;
@@ -367,7 +367,7 @@ path:hover {
 #github {
     background: url('../img/Github.svg');
     background-color: rgba(137, 90, 47, 0.632);
-    top: 6%;
+    top: 7%;
     height: 32px;
     width: 32px;
     border-radius: 25px;
