@@ -80,6 +80,7 @@ h3 {
     z-index:80;
   }
 
+<<<<<<< HEAD
 /*  modal */
 .modal {
     display: none;
@@ -101,6 +102,9 @@ h3 {
     text-align: center;
     font-family: "IM Fell English", serif;
 }
+=======
+
+>>>>>>> parent of 09d43c1 (added)
 
 /* modal Close button */
 .close-button {
