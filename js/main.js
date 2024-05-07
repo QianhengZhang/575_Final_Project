@@ -309,13 +309,13 @@ function calcPropRadius(attValue) {
 function getColor(response_AES_lang) {
     switch (response_AES_lang) {
         case 'shifting':
-            return "#FCBBA1"
+            return "#f4c6b4"
         case 'threatened':
-            return "#FC9272";
+            return "#f89371";
         case 'nearly_extinct':
-            return "#FB6A4A";
+            return "#f75d3a";
         case 'moribund':
-            return "#DE2D26";
+            return "#b20a04";
         case 'extinct':
             return "#5B5354";
         default:
@@ -629,7 +629,7 @@ function makePieChart(data) {
         .attr("transform", `translate(${width/2}, ${height/2})`);
     const color = d3.scaleOrdinal()
         .domain(["moribund", "shifting", "threatened", "nearly_extinct", "extinct"])
-        .range(["#DE2D26", "#FC9272", "#FCBBA1", "#FB6A4A", "#5B5354"]);
+        .range(["#b20a04", "#f4c6b4", "#f89371", "#f75d3a", "#5B5354"]);
     update(data, svg, radius, color)
 }
 

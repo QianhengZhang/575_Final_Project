@@ -166,7 +166,7 @@ hr {
 
 /* style popup */
 .leaflet-popup {
-    background-color: #fafaf9 !important;  
+    background-color: white !important;  
     border: none;
 }
 
@@ -185,7 +185,7 @@ hr {
 .leaflet-popup-content {
     z-index: 1000;
     /* background-color: #9b8571 !important; */
-    background-color: #fafaf9 !important;
+    background-color: white !important;
     padding: 16px;
     color: #0f0f0f;
     border: none;
@@ -415,19 +415,19 @@ input#extinct_check {
 
 /* color */
 #shifting_color {
-    background-color: #FCBBA1;
+    background-color: #f4c6b4;
 }
 
 #threatened_color {
-    background-color: #FC9272;
+    background-color: #f89371;
 }
 
 #nearly_extinct_color {
-    background-color: #FB6A4A;
+    background-color: #f75d3a;
 }
 
 #moribund_color {
-    background-color: #DE2D26;
+    background-color: #b20a04;
 }
 
 #extinct_color{
