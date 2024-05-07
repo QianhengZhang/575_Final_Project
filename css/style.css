@@ -80,7 +80,27 @@ h3 {
     z-index:80;
   }
 
+/* information page */
+.popup {
+    display: none;
+    position: fixed;
+    top: 25%;
+    left: 30%;
+    width: 40%;
+    height: 40%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-family: "IM Fell English", serif;
+}
 
 /* style popup */
 .leaflet-popup {
