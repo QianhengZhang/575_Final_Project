@@ -138,27 +138,6 @@ function setMap(){
     }).addTo(map);
     getData();
     setHeatMap(Object.keys(count));
-    // map.removeLayer(heatmapLayer);
-    // map.addLayer(propSymbolLayer);
-    //drawPie(count)
-    // map.on("zoomend", function() {
-    //     var zoomlevel = map.getZoom();
-    //     if (zoomlevel > 4.5) {
-    //         if (map.hasLayer(heatmapLayer)) {
-    //             map.removeLayer(heatmapLayer);
-    //         }
-    //         map.addLayer(propSymbolLayer);
-    //         enableCheckBox();
-    //     }else if (zoomlevel <= 4.5) {
-    //         if (map.hasLayer(propSymbolLayer)) {
-    //             map.removeLayer(propSymbolLayer);
-
-    //         }
-    //         map.addLayer(heatmapLayer);
-    //         disableCheckBox();
-    //     }
-    //     console.log("Current Zoom Level = " + zoomlevel);
-    // });
     document.getElementById("infoButton").addEventListener("click", function() {
         toggleInformation();
     });
@@ -357,7 +336,7 @@ function pointToLayer(feature, latlng, attributes){
     // var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
     var popupContent = "<h2> Language: " + feature.properties.id_name_lang + "</h2>" 
                      + "<hr>" 
-                     + "<p class='popupContent-text'>        Click for more information</p>"
+                     + "<p class='popupContent-text'>        Click the point for more information</p>"
     
     // Create the popup instance
     var popup = L.popup({

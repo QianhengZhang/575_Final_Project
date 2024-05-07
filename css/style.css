@@ -36,7 +36,9 @@ h2 {
     text-align: left;
     margin-left: 2%;
     font-family: "IM Fell English", serif;
+    font-size: 1.25em;
     margin-top: 0%; 
+    margin-bottom: 0%;
 }
 
 h3 {
@@ -59,7 +61,7 @@ h4 {
     margin-left: 2%;
     font-family: "IM Fell English", serif;
     font-style: italic;
-    font-size:1.5em;
+    font-size:1.25em;
     margin-top: 0%; 
     margin-bottom: 0%; 
 }
@@ -174,14 +176,14 @@ hr {
 /* style popup */
 .leaflet-popup {
     background-color: white !important;  
-    border: none;
+    /* border: none; */
 }
 
-.leaflet-popup-content-wrapper {
-    background-color:#9b8571;
-    border-radius: 0;
+.custom .leaflet-popup-content-wrapper {
+    background:#9b8571;
+    border-radius: 0
     /* border: none !important;  */
-    padding: 0 0 0 0 !important; /*Deleted top and bottom white sides!*/
+    /*padding: 0 0 0 0 !important; /*Deleted top and bottom white sides!*/
 }
 
 .leaflet-popup-tip-container {
@@ -192,8 +194,8 @@ hr {
 .leaflet-popup-content {
     z-index: 1000;
     /* background-color: #9b8571 !important; */
-    background-color: white !important;
-    padding: 16px;
+    background-color: rgb(255, 255, 255) !important;
+    padding: 0%;
     color: #0f0f0f;
     border: none;
 }
