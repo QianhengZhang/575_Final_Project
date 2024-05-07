@@ -31,7 +31,7 @@ h2 {
     text-align: left;
     margin-left: 2%;
     font-family: "IM Fell English", serif;
-
+    margin-top: 0%; 
 }
 
 h3 {
@@ -47,6 +47,8 @@ h3 {
     font-family: "IM Fell English", serif;
     font-style: italic;
     font-size:17px;
+    margin-top: 0%; 
+    margin-bottom: 0%; 
 }
 
 #max-text {
@@ -76,6 +78,36 @@ h3 {
     height: 87%;
     z-index:80;
   }
+
+
+
+/* style popup */
+.leaflet-popup {
+    background-color: #fafaf9 !important;  
+    border: none;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color:#9b8571;
+    border-radius: 0;
+    /* border: none !important;  */
+    padding: 0 0 0 0 !important; /*Deleted top and bottom white sides!*/
+}
+
+.leaflet-popup-tip-container {
+    background: transparent !important;
+    display: none; 
+   }
+
+.leaflet-popup-content {
+    z-index: 1000;
+    /* background-color: #9b8571 !important; */
+    background-color: #fafaf9 !important;
+    padding: 16px;
+    color: #0f0f0f;
+    border: none;
+}
+
 
 /* style zoom control */
 
@@ -383,27 +415,6 @@ path:hover {
     margin-top: 13%;
     margin-bottom: 0%;
     font-family: IM Fell English, sans-serif;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 25%;
-    left: 30%;
-    width: 40%;
-    height: 40%;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.popup-content {
-    background-color: rgb(11, 11, 11,0.1);
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-    font-family: IM Fell English, sans-serif !important;
 }
 
 .close {
