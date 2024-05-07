@@ -80,26 +80,41 @@ h3 {
     z-index:80;
   }
 
-/* information page */
-.popup {
+/*  modal */
+.modal {
     display: none;
     position: fixed;
     top: 25%;
     left: 30%;
     width: 40%;
     height: 40%;
-    z-index: 999;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.popup-content {
+.modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
     text-align: center;
     font-family: "IM Fell English", serif;
+}
+
+/* modal Close button */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover, .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* style popup */
