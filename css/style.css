@@ -108,6 +108,12 @@ h3 {
     border: none;
 }
 
+path:hover {
+    stroke-width: 3px;
+    stroke:rgba(137, 90, 47, 0.9);
+
+}
+
 
 /* style zoom control */
 
@@ -177,8 +183,6 @@ h3 {
 	border-radius: 10px;
 }
 
-
-
 #popupContent {
     fill: #949185;
     font-family: "IM Fell English", serif;
@@ -188,6 +192,7 @@ h3 {
     display: None;
 }
 
+/* language information panel */
 .map-overlay {
     position: absolute;
     font-family: IM Fell English, sans-serif;
@@ -199,6 +204,8 @@ h3 {
 
 }
 
+
+/* endangerment level panel */
 #filter {
     bottom: 0%;
     right: 0;
@@ -242,6 +249,7 @@ h3 {
     width: 20%;
 }
 
+/* icon and effect */
 .icon {
     position: absolute;
     overflow: auto;
@@ -288,61 +296,62 @@ h3 {
     box-shadow: 0px 3px 3px 0px rgba(137, 90, 47, 0.632);
 }
 
-/* input#moribund_check {
+
+/* Endagerment Level label styling */
+/* check box color */
+input#moribund_check {
     box-sizing: border-box;
     padding: 0;
-    accent-color: #DE2D26;
+    accent-color: rgba(137, 90, 47, 0.632);
 }
 
 input#shifting_check {
     box-sizing: border-box;
     padding: 0;
-    accent-color: #FC9272;
+    accent-color: rgba(137, 90, 47, 0.632);
 }
 
 input#threatened_check {
     box-sizing: border-box;
     padding: 0;
-    accent-color: #FCBBA1;
+    accent-color: rgba(137, 90, 47, 0.632);
 }
 
 input#nearly_extinct_check {
     box-sizing: border-box;
     padding: 0;
-    accent-color: #FB6A4A;
+    accent-color: rgba(137, 90, 47, 0.632);
 }
 
 input#extinct_check {
     box-sizing: border-box;
     padding: 0;
-    accent-color: #5B5354;
-} */
-
-.square {
-    width: 10px;
-    height: 10px;
+    accent-color: rgba(137, 90, 47, 0.632);
 }
 
-#moribund_color {
-    background-color: #DE2D26;
-}
 
+/* color */
 #shifting_color {
-    background-color: #FC9272;
+    background-color: #FCBBA1;
 }
 
 #threatened_color {
-    background-color: #FCBBA1;
+    background-color: #FC9272;
 }
 
 #nearly_extinct_color {
     background-color: #FB6A4A;
 }
 
+#moribund_color {
+    background-color: #DE2D26;
+}
+
 #extinct_color{
     background-color: #5B5354;
 }
 
+/* endangerment level panel */
 #info_placeholder {
     position: relative;
     top: 45%;
@@ -367,17 +376,14 @@ input#extinct_check {
     margin-top: 1%;
 }
 
-path:hover {
-    stroke-width: 3px;
-    stroke:rgba(137, 90, 47, 0.9);
 
-}
 
 .highlight {
     stroke-width: 5px;
     stroke: red;
 }
 
+/* language information */
 .infolabel {
     position: absolute;
     height: 20px;

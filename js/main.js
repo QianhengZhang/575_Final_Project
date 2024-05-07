@@ -276,14 +276,14 @@ function calcPropRadius(attValue) {
 
 function getColor(response_AES_lang) {
     switch (response_AES_lang) {
-        case 'moribund':
-            return "#DE2D26";
         case 'shifting':
-            return "#FC9272";
+            return "#FCBBA1"
         case 'threatened':
-            return "#FCBBA1";
+            return "#FC9272";
         case 'nearly_extinct':
             return "#FB6A4A";
+        case 'moribund':
+            return "#DE2D26";
         case 'extinct':
             return "#5B5354";
         default:
