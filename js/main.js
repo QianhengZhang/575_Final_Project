@@ -9,11 +9,11 @@ dataStats = {};
 searchItemsLanguages = {};
 searchItemsCountries = {};
 count = {
-    "Moribund": 642,
-    "Shifting": 2976,
-    "Threatened": 1376,
-    "Nearly Extinct": 332,
-    "Extinct": 330
+    "moribund": 642,
+    "shifting": 2976,
+    "threatened": 1376,
+    "nearly_extinct": 332,
+    "extinct": 330
 }
 
 const locationCoverage = ["Africa",
