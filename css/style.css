@@ -46,6 +46,7 @@ h3 {
 
 }
 
+/* pop-up in map */
 .popupContent-text {
     text-align: left;
     margin-left: 2%;
@@ -85,29 +86,62 @@ h3 {
   }
 
 /*  modal */
-.popop {
+.popup {
     display: none;
     position: fixed;
-    top: 25%;
-    left: 30%;
-    width: 40%;
-    height: 40%;
-    z-index: 9999;
+    top: 20%;
+    left: 20%;
+    width: 55%;
+    height: 50%;
+    z-index: 99;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    /* background-color: rgba(137, 90, 47, 0.632); */
+    font-family: "IM Fell English", serif;
 }
 
-.popop-content {
-    background-color: #fff;
+.popup-content {
+    background-color: #9b8571;
+    box-shadow: 3px 3px 3px #4b312b;
     padding: 20px;
     border-radius: 5px;
     text-align: center;
     font-family: "IM Fell English", serif;
 }
 
+hr {
+    border: none;              
+    height: 2px;               
+    background-color: black;  
+    margin: 10px 0;           
+}
 
+.popup-content p.introduction {
+    text-indent: 2em;
+    text-align: left;
+    margin-top: 5px; 
+    margin-bottom: 5px; 
+    font-size:18px;
+}
+
+.popup-content p.footnotes {
+    text-indent: 2em;
+    text-align: left;
+    margin-top: 5px; 
+    margin-bottom: 5px; 
+    font-size:18px;
+}
+
+.popup-content p.datasources {
+    text-indent: 2em;
+    text-align: left;
+    font-style: italic;
+    font-size:18px;
+    color:#4b312b;
+    margin-top: 5px; 
+    margin-bottom: 5px;
+}
 /* modal Close button */
 /* .close-button {
     color: #aaa;
@@ -422,7 +456,7 @@ input#extinct_check {
 
 .highlight {
     stroke-width: 5px;
-    stroke: red;
+    stroke: rgb(65, 41, 41);
 }
 
 
