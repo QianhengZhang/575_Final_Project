@@ -17,6 +17,7 @@
     background-color: #ddd7cc;
     outline-offset: 10px;
     z-index:90;
+    box-shadow: 5px 5px 5px #4b312b;
 }
 #title {
     position: absolute;
