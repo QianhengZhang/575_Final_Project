@@ -70,6 +70,7 @@
 .leaflet-searchbox-container .leaflet-searchbox-icon {
     width: 50%;
     height: auto;
+    padding-top: 5px;
 }
 
 .leaflet-searchbox-container .leaflet-searchbox-autocomplete {
