@@ -142,6 +142,13 @@ hr {
     margin-top: 5px; 
     margin-bottom: 5px;
 }
+
+.popup-content img {
+    width: 20px; /* Adjust according to your design */
+    height: 20px; /* Adjust according to your design */
+    vertical-align: middle; /* Align with text */
+}
+
 /* modal Close button */
 .close-button {
     color: #aaa;
