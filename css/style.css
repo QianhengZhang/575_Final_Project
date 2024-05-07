@@ -65,19 +65,19 @@ h4 {
 }
 
 #max-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
 
 #mean-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
 
 #min-text {
-    font-family: "IM Fell English", serif;
+    font-family: "lato";
     font-size: 12px;
     font-weight: bold;
 }
@@ -261,11 +261,11 @@ path:hover {
 
 
 .legend-control-container {
-	width: 180px;
+	width: 190px;
 	height: 160px;
 	background-color: rgba(221, 215, 204, 0.9);
 	padding-left: 5px;
-	padding-right: 10px;
+	padding-right: 5px;
 	padding-bottom: 0%;
     
 	text-align: left;

@@ -408,7 +408,7 @@ function createLegend(attributes) {
 			container.innerHTML = '<h3 class="temporalLegend">Total Number of Speakers</h3>';
 
 			//Step 1: start attribute legend svg string
-			var svg = '<svg id="attribute-legend" width="180px" height="150px">';
+			var svg = '<svg id="attribute-legend" width="190px" height="150px">';
 			//array of circle names to base loop on
 			var circles = ["max", "mean", "min"];
 
@@ -422,7 +422,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
 				    //Step 4: create legend text to label each circle
 				    var textY = i * 30 + 22;
@@ -433,7 +433,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+				    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
 				    //Step 4: create legend text to label each circle
 				    var textY = i * 30 + 22;
@@ -443,7 +443,7 @@ function createLegend(attributes) {
                     var cy = 100 - radius;
 
                     //circle string
-                    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="50"/>';
+                    svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#FCBBA1" fill-opacity="0.8" stroke="#000000" cx="55"/>';
 
                     //Step 4: create legend text to label each circle
                     var textY = i * 30 + 22;
