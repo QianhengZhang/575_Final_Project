@@ -16,7 +16,7 @@ count = { // initial count of different categories of languages
     "extinct": 330
 }
 
-countChart = {
+countChart = { // initial count of different categories of languages， use for making pie chart
     "Moribund": 642,
     "Shifting": 2976,
     "Threatened": 1376,
@@ -50,6 +50,7 @@ const officialLanguage = [ // The official languages of different countries
     ]
 
 
+// Initialize the window
 function initializing(){
 
     // Display the modal and ensure it is above other elements
@@ -78,15 +79,15 @@ function initializing(){
         }
     }
 
-
+    // Add search button functions
     searchbox.onButton("click", search);
     searchbox.onInput("keyup", function (e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode == 13) { // Use enter key for searching
             search();
         } else {
             var value = searchbox.getValue();
             if (value != "") {
-                var languageResults = fuseLanguage.search(value);
+                var languageResults = fuseLanguage.search(value); // add results from languages and country seperately
                 var countryResults = fuseCountry.search(value);
                 console.log(languageResults)
                 console.log(countryResults.map(res => res.item).slice(0, 5))
@@ -102,6 +103,8 @@ function initializing(){
         reset();
     })
 }
+
+// Set map
 function setMap(){
     var height = window.innerHeight;
     var width = window.innerWidth * 0.7;
@@ -113,8 +116,6 @@ function setMap(){
             [90, 180]
         ]
     });
-
-    //add OSM base tilelayer
 
     //customized mapbox layer: ancient chinese style
     //var map = L.map('map5').setView([34.25, 108.94], 9);
@@ -128,25 +129,29 @@ function setMap(){
 	    maxZoom: 20
     }).addTo(map);
 
+    //move zoom control to bottom right
     map.zoomControl.remove();
     L.control.zoom({
         position: 'bottomright'
     }).addTo(map);
+
+    // Initialize search bar
     searchbox = L.control.searchbox({
         position: 'topleft',
         expand: 'left',
         autocompleteFeatures: ['setValueOnClick']
     }).addTo(map);
-    getData();
-    setHeatMap(Object.keys(count));
+    getData(); // initialize prop symbols
+    setHeatMap(Object.keys(count)); // initialize heat map
     document.getElementById("infoButton").addEventListener("click", function() {
-        toggleInformation();
+        toggleInformation(); // info panel
     });
     document.getElementById("close").addEventListener("click", function() {
         document.getElementById("popup").style.display = "none";
     });
 };
 
+//Read data and initialize prop symbol map
 function getData(map) {
     fetch("data/language.geojson")
         .then(function(response){
@@ -157,7 +162,7 @@ function getData(map) {
                 calcStats(json);
                 createPropSymbols(json, attributes);
                 createLegend(attributes);
-                fuseLanguage = new Fuse(Object.keys(searchItemsLanguages), {
+                fuseLanguage = new Fuse(Object.keys(searchItemsLanguages), { // create search array
                     shouldSort: true,
                     threshold: 0.6,
                     location: 0,
@@ -167,6 +172,7 @@ function getData(map) {
             })
 };
 
+//Read data and create country's search array
 function getCountry() {
     fetch("data/countries.geojson")
         .then(function(response) {
@@ -186,7 +192,7 @@ function getCountry() {
         })
 };
 
-
+//Read data and intialize heat map
 function setHeatMap(categories) {
     fetch("data/language.geojson")
         .then(function(response){
@@ -197,6 +203,7 @@ function setHeatMap(categories) {
         })
 };
 
+//Create heat map
 function makeHeatMap(data) {
     var cfg = {
         "radius": 7,
@@ -221,6 +228,7 @@ function makeHeatMap(data) {
 
 }
 
+// Process the data of heat map
 function processDataHeatMap(data, categories) {
     var result = [];
     console.log(data)
@@ -238,6 +246,7 @@ function processDataHeatMap(data, categories) {
     return result;
 }
 
+// Process the data for proportional symbol map
 function processData(data) {
     // Empty array to hold attributes
     var attributes = [];
@@ -250,6 +259,7 @@ function processData(data) {
     return attributes;
 };
 
+// Calculate max, mean, min of the dataset
 function calcStats(data){
     var allValues = [];
     // Loop through each feature in the GeoJSON data
@@ -286,6 +296,7 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
+// Use different color for different levels
 function getColor(response_AES_lang) {
     switch (response_AES_lang) {
         case 'shifting':
@@ -303,6 +314,7 @@ function getColor(response_AES_lang) {
     }
 }
 
+// make language point into layers
 function pointToLayer(feature, latlng, attributes){
     var attribute = attributes[7]; //Determine which attribute to visualize with proportional symbols
     var level = feature.properties['response_AES_lang'].split(' ').join('_');
@@ -446,6 +458,7 @@ function createLegend(attributes) {
 	map.addControl(new LegendControl());
 };
 
+//Retrieve information for the clicked points
 function onClick(e, properties) {
     var item = document.querySelector('.id_'+properties.id_name_lang.split(' ').join('_'));
     item.classList.remove('highlight');
@@ -467,6 +480,7 @@ function onClick(e, properties) {
 
 }
 
+//Make a div of information
 function contentWrapper(name, proprties) {
     var info_container = document.createElement("div");
     info_container.classList.add("info_content");
@@ -476,6 +490,7 @@ function contentWrapper(name, proprties) {
     return info_container;
 }
 
+// make an array of languages into one string
 function listToText(type, properties) {
     var result = "";
     if(type == "area") {
@@ -503,6 +518,7 @@ function listToText(type, properties) {
     return result;
 }
 
+//Disable all checkboxes
 function disableCheckBox() {
     var checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(function(checkbox){
@@ -510,12 +526,15 @@ function disableCheckBox() {
     })
 }
 
+//Enable all checkboxes
 function enableCheckBox() {
     var checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(function(checkbox){
         checkbox.disabled = false;
     })
 }
+
+//Allow checkboxes control the element being shown
 function addCheckBoxFunctions() {
     var checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(function(checkbox) {
@@ -538,13 +557,13 @@ function addCheckBoxFunctions() {
     //setHeatMap(categories)
 }
 
-
-
+// Make all hidden element shown, make all shown element hidden
 function toggleElements(element) {
     element.classList.toggle("show");
     element.classList.toggle('hide');
 }
 
+// Given the current shown elements, calculate how many elements in each category
 function caculateCurrentShownElements() {
     count = {
         "moribund": 0,
@@ -567,6 +586,7 @@ function caculateCurrentShownElements() {
     return count;
 }
 
+// Switch between heat map and proportional symbol map layers
 function reset() {
     if (map.hasLayer(heatmapLayer)) {
         map.removeLayer(heatmapLayer);
@@ -587,6 +607,7 @@ function reset() {
     }
 }
 
+// Create the piechart
 function makePieChart(data) {
     const width = 220,
     height = 220,
@@ -613,6 +634,7 @@ function makePieChart(data) {
     update(data, svg, radius, color)
 }
 
+//Update Piechart
 function update(data, svg, radius, color) {
 
     // Compute the position of each group on the pie:
@@ -670,6 +692,7 @@ function update(data, svg, radius, color) {
     .on("mousemove", moveLabel);
 }
 
+//Give pie chart labels of the percentages being shown
 function setLabel(props){ //label for the pie chart
     //label content
     var sum = 0;
@@ -690,6 +713,7 @@ function setLabel(props){ //label for the pie chart
 
 };
 
+//filter depending on given pie chart
 function piefilter(props) { //updates to pie chart from filter
     console.log(props.data[0]);
     document.getElementById(props.data[0]+ "_check").checked = false;
@@ -702,11 +726,13 @@ function piefilter(props) { //updates to pie chart from filter
     removeLabel();
 }
 
+//Remove label
 function removeLabel() {
     d3.select(".infolabel")
         .remove();
 }
 
+//Move label around the mouse movement
 function moveLabel() {
     //use coordinates of mousemove event to set label coordinates
     var x = event.clientX - 100,
@@ -717,7 +743,7 @@ function moveLabel() {
         .style("top", y + "px");
 };
 
-//search function
+//search function, fly to the location of elements being selected
 function search() {
     var value = searchbox.getValue();
     value = capitalize(value);
@@ -751,6 +777,7 @@ function search() {
     }, 800);
 }
 
+// capitalize the words in a string
 function capitalize(string) {
     var wordList = string.split(' ');
     var newWordList = []
@@ -767,6 +794,7 @@ function capitalize(string) {
     return newWords;
 }
 
+// Toggle the instruction panel
 function toggleInformation() {
     if (document.getElementById("popup").style.display == "block"){
         document.getElementById("popup").style.display = "none";
@@ -775,7 +803,7 @@ function toggleInformation() {
     }
 }
 
-
+//initialize the window
 window.addEventListener("load", (event) => {
     setMap();
     document.getElementById("popup").style.display = "none";
