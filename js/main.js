@@ -1,14 +1,14 @@
-var map;
-var searchbox;
-var fuseLanguage;
-var fuseCountry
-var heatmapLayer;
-var propSymbolLayer;
-var attributes = [];
-dataStats = {};
-searchItemsLanguages = {};
-searchItemsCountries = {};
-count = {
+var map; // map object
+var searchbox; // search box object
+var fuseLanguage; // language searching object
+var fuseCountry // country searching object
+var heatmapLayer; // The heat map layer
+var propSymbolLayer; // The proportional symbol map layer
+var attributes = []; // csv file attributes
+dataStats = {}; // stores max mean min of dataset
+searchItemsLanguages = {}; // languages and their coordinates
+searchItemsCountries = {}; // countries and their coordinates
+count = { // initial count of different categories of languages
     "moribund": 642,
     "shifting": 2976,
     "threatened": 1376,
@@ -24,7 +24,7 @@ countChart = {
     "Extinct": 330
 }
 
-const locationCoverage = ["Africa",
+const locationCoverage = ["Africa", // The locations of languages
     "Arab",
     "Asia",
     "Australia_and_New_Zealand",
@@ -37,7 +37,7 @@ const locationCoverage = ["Africa",
     "Southern_Asia",
     "Western_Africa"]
 
-const officialLanguage = [
+const officialLanguage = [ // The official languages of different countries
     "worldlang_Arabic_country",
     "worldlang_Bahasa_country",
     "worldlang_English_country",
@@ -48,6 +48,7 @@ const officialLanguage = [
     "worldlang_Russian_country",
     "worldlang_Spanish_country",
     ]
+
 
 function initializing(){
 
@@ -334,10 +335,10 @@ function pointToLayer(feature, latlng, attributes){
 
     // Hover action and Popup Content
     // var popupContent = "<p><b>Language:</b> " + feature.properties.id_name_lang + "</p>";
-    var popupContent = "<h2> Language: " + feature.properties.id_name_lang + "</h2>" 
-                     + "<hr>" 
+    var popupContent = "<h2> Language: " + feature.properties.id_name_lang + "</h2>"
+                     + "<hr>"
                      + "<p class='popupContent-text'>        Click the point for more information</p>"
-    
+
     // Create the popup instance
     var popup = L.popup({
         offset: new L.Point(0, -options.radius),
@@ -358,7 +359,7 @@ function pointToLayer(feature, latlng, attributes){
     layer.on('click', (e) => {
         onClick(e, feature.properties); // If still want to handle click events
     });
-    
+
     return layer;
 };
 
